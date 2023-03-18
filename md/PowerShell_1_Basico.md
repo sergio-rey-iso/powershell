@@ -12,8 +12,8 @@ permalink: /PowerShell_1_Basico/
   - [1.1. Ventajas de **PowerShell**](#11-ventajas-de-powershell)
   - [1.2. Formato de los comandos](#12-formato-de-los-comandos)
     - [1.2.1. El concepto VERBO–SUSTANTIVO](#121-el-concepto-verbosustantivo)
-  - [1.3. Ayudas en PowerShell](#13-ayudas-en-powershell)
-- [2. Algunos comandos básicos de `PowerShell`](#2-algunos-comandos-básicos-de-powershell)
+  - [1.3. Ayudas en ***PowerShell***](#13-ayudas-en-powershell)
+- [2. Algunos comandos básicos de ***PowerShell***](#2-algunos-comandos-básicos-de-powershell)
   - [2.1. `Get-Command`](#21-get-command)
   - [2.2. `Get-Member`](#22-get-member)
   - [2.3. Alias. Concepto y comandos.](#23-alias-concepto-y-comandos)
@@ -21,7 +21,7 @@ permalink: /PowerShell_1_Basico/
     - [2.3.2. `Set-Alias`](#232-set-alias)
   - [2.4. `Get-Date`](#24-get-date)
   - [2.5. Comandos para la gestión de Archivos y Carpetas](#25-comandos-para-la-gestión-de-archivos-y-carpetas)
-- [3. Tuberias y redirecciones](#3-tuberias-y-redirecciones)
+- [3. Tuberías y redirecciones](#3-tuberías-y-redirecciones)
   - [3.1. Tuberías](#31-tuberías)
   - [3.2. Redireccionamiento](#32-redireccionamiento)
 - [4. Formateando, ordenando y filtrando resultado](#4-formateando-ordenando-y-filtrando-resultado)
@@ -50,7 +50,7 @@ permalink: /PowerShell_1_Basico/
   - [6.1. **WMI**: *Windows Management Instrumentation*.](#61-wmi-windows-management-instrumentation)
     - [6.1.1. Objetos **WMI**](#611-objetos-wmi)
     - [6.1.2. WMIC](#612-wmic)
-  - [6.2. PowerShell para consultar el **registro de windows**](#62-powershell-para-consultar-el-registro-de-windows)
+  - [6.2. ***PowerShell*** para consultar el **registro de windows**](#62-powershell-para-consultar-el-registro-de-windows)
 
 
 
@@ -65,7 +65,7 @@ Se ha diseñado para mejorar el entorno de línea de comandos y scripting median
 Powershell no viene preinstalado en los sistemas anteriores a Windows 7, pudiendo instalarse como una actualización del sistema.
 
 Características:
-- Powershell hereda de su predecesora la mayoría de comandos relativos a carpetas: `mkdir`, `cd`, `dir`
+- ***PowerShell*** hereda de su predecesora la mayoría de comandos relativos a carpetas: `mkdir`, `cd`, `dir`
 - incluye una serie de comandos similares a Linux para mejorar la adaptación: `ls`, `clear`, `pwd`
 - Usando la tecla TAB se pueden autocompletar comandos o rutas de archivos:
 ```
@@ -78,20 +78,20 @@ F7 se muestra una ventana donde podemos seleccionar los comandos anteriores.VENT
 
 ## 1.1. Ventajas de **PowerShell**
 
-Windows PowerShell combina un entorno interactivo con un entorno de scripting que ofrece acceso a herramientas de línea de comandos y objetos COM (Componet Object Model), y permite aprovechar la eficacia de la biblioteca de clases de .NET Framework (FCL).
+Windows ***PowerShell*** combina un entorno interactivo con un entorno de scripting que ofrece acceso a herramientas de línea de comandos y objetos COM (Componet Object Model), y permite aprovechar la eficacia de la biblioteca de clases de .NET Framework (FCL).
 
 También mejora los scripts de Windows Script Host (WSH), que permiten utilizar varias herramientas de línea de comandos y objetos de automatización COM, pero que no proporcionan un entorno interactivo.
 
-Aunque la interacción con Windows PowerShell se realiza mediante comandos de texto, Windows PowerShell está basado en objetos, no en texto. El resultado de un comando es un objeto.
+Aunque la interacción con Windows ***PowerShell*** se realiza mediante comandos de texto, Windows ***PowerShell*** está basado en objetos, no en texto. El resultado de un comando es un objeto.
 
 ## 1.2. Formato de los comandos
 
-Los comandos de `Powershell` se denominan cmdlets (commandlets).
+Los comandos de ***Powershell*** se denominan cmdlets (commandlets).
 Estos comandos tienen una sintaxis particular que se compone de un verbo, un sustantivo y después las opciones y argumentos:
 
     verbo-sust –parametro1 argumento1 -parametro2 argumento2 ...
 
-Como se puede apreciar, el verbo y el sustantivo están separados por un guión(`-`) y los parámetros y argumentos por espacios.
+Como se puede apreciar, el verbo y el sustantivo están separados por un guion(`-`) y los parámetros y argumentos por espacios.
 
 Ejemplos:
 
@@ -145,9 +145,9 @@ Get-Command -name Clear-Host     # Muestra información de lo indicado a través
 
 
 
-## 1.3. Ayudas en PowerShell
+## 1.3. Ayudas en ***PowerShell***
 
-Es muy importante manejar el sistema de ayuda de Powershell. 
+Es muy importante manejar el sistema de ayuda de ***Powershell***. 
 
 Para acceder a la ayuda disponemos de varios comandos y parámetros:
 
@@ -160,7 +160,7 @@ Opciones:
 `-full` Muestra la ayuda completa
 `-examples `Muestra ejemplos de uso del cmdlet
 
-Es aconsejable actualizar la ayuda de PowerShell con el comando `update-help`
+Es aconsejable actualizar la ayuda de ***PowerShell*** con el comando `update-help`
 
 Ejemplos:
 
@@ -184,7 +184,7 @@ get-help Get-Date -online	#ayuda online
 get-help Write-Output -ShowWindow #Muestra la ayuda en una ventana
 ```
 
-# 2. Algunos comandos básicos de `PowerShell`
+# 2. Algunos comandos básicos de ***PowerShell***
 
 ## 2.1. `Get-Command` 
 Muestra información básica sobre los cmdlets. Se suele utilizar para obtener listas de cmdlets.
@@ -219,7 +219,7 @@ Get-Command | Where-Object{ $_.Name -like '*alias'} #Retorna
 
 ## 2.3. Alias. Concepto y comandos.
 
-Un **Alias** asocia un nombre de comando con otro comando. Se usan para evitar frustrar al usuario al usar un nuevo Shell. Hay de unix7linux como de ms-dos/cmd.
+Un **Alias** asocia un nombre de comando con otro comando. Se usan para evitar frustrar al usuario al usar un nuevo Shell. Hay de unix/linux como de ms-dos/cmd.
 
 ### 2.3.1. `Get-Alias`
 
@@ -266,7 +266,7 @@ Set-Alias -Name list -Value Get-ChildItem
 Set-Alias list Get-ChildItem                        #ídem anterior
 Set-Alias -Name np -Value C:\Windows\notepad.exe    #Creando un alias a un ejecutable
  ``` 
-Más información sobre Alias en PowerShell: [PowerShell: List of Aliases](http://xahlee.info/powershell/powershell_aliases.html)
+Más información sobre Alias en ***PowerShell***: [PowerShell: List of Aliases](http://xahlee.info/powershell/powershell_aliases.html)
 
 ## 2.4. `Get-Date`
 
@@ -325,20 +325,20 @@ Get-Content .\prueba.txt                # Muestra el contenido del fichero anter
 > 
 Pero **nosotros utilizaremos exclusivamente los comandos de powershell**
 
-# 3. Tuberias y redirecciones
+# 3. Tuberías y redirecciones
 
 En ocasiones, un comando no es suficiente para obtener toda la información que necesitamos o realizar una acción completa, por ejemplo 
 
 - Supongamos que debemos obtener los ficheros con un determinado tamaño y además ordenados de una forma específica
 - O queremos que al obtener un listado de ficheros, guardar este listado directamente en un archivo
 
-Para ello tenemos las tuberias y redirecciones
+Para ello tenemos las tuberías y redirecciones
 
-En el siguiente enlace de [Profesional Review: Redirecciones y Tuberias en línux](https://www.profesionalreview.com/2017/02/19/redirecciones-tuberias-linux/) tienes más información
+En el siguiente enlace de [Profesional Review: Redirecciones y Tuberías en línux](https://www.profesionalreview.com/2017/02/19/redirecciones-tuberias-linux/) tienes más información
 
 ## 3.1. Tuberías
 
-El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma en Powershell, pero su uso es aun más intensivo, ya que la información que muestran los comandos, el formato de salida, etc, se controla usando este mecanismo.
+El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma en ***Powershell***, pero su uso es aun más intensivo, ya que la información que muestran los comandos, el formato de salida, etc, se controla usando este mecanismo.
 
 Permite conectar la salida de un cmdlet con la entrada de otro, para tratar la información de inicio, por ejemplo teniendo en cuenta el primer ejemplo anterior:
 
@@ -349,12 +349,12 @@ Permite conectar la salida de un cmdlet con la entrada de otro, para tratar la i
 O sea, utilizaremos una ***tubería*** o ***pipe*** para enlazar los comandos
 
 <div align="center">
-    <img src="../img/01_tuberías.png" alt="Redirecciones y tuberias" width="70%" />
+    <img src="../img/01_tuberías.png" alt="Redirecciones y tuberías" width="70%" />
 </div>
 
 Ejemplos de tuberías:
 
-Queremos obtener el listado de arhivos y carpetas de un directorio grande sin perdernos nada, poco a poco
+Queremos obtener el listado de archivos y carpetas de un directorio grande sin perdernos nada, poco a poco
 ```powershell
 # Primero conseguimos los ficheros
 Get-ChildItem c:\Winwdows
@@ -363,7 +363,7 @@ Get-ChildItem c:\Winwdows
 Get-ChildItem c:\windows | more 
 ```
 
-Para contar la cantidad de comandos diferentes de PowerSHell
+Para contar la cantidad de comandos diferentes de ***PowerSHell***
 
 ```powershell
 # primero obtenemos los comandos
@@ -381,7 +381,7 @@ Get-ChildItem
 # sobre este listado de ficheros, filtramos los que tiene mas de 100KB
 Get-ChildItem | Where-Object {$_.Length -gt 100KB}
 
-# y ahora los ordemanmos
+# y ahora los ordenamos
 Get-ChildItem | Where-Object {$_.Length -gt 100KB} | Sort-Object -Descending -Property Length
 
 # una variante
@@ -390,7 +390,7 @@ Get-ChildItem  -Recurse | Where-Object {$_.Length -gt 100KB} | Sort-Object -Desc
 
 Otro ejemplo, necesitamos saber los puertos sobre los que hay una conexión activa
 ```powershell
-# Primero obtenemos los listado de puartos del equpo
+# Primero obtenemos los listado de puertos del equipo
 Get-NetTCPConnection
 
 # Ahora necesitamos filtrar las que tiene estado activo; state = Established
@@ -404,7 +404,7 @@ Get-NetTCPConnection | Where-Object{$_.State -eq 'Established'} | Format-Table -
 
 Las redirecciones nos permiten enviar los resultados a un lugar diferente de la pantalla. Normalmente a un archivo
 
-Tenemos dos simbolos para hacer eso
+Tenemos dos símbolos para hacer eso
 - `>` : Crea un nuevo archivo y deposita la salida del cmdlet. Si el archivo ya existe, lo sobre escribe y por lo tanto se elimina su contenido previo.
 - `>>` : Añade la salida del cmdlet al archivo existente. Si el fichero no existe lo crea y añade el contenido, y si existe, añade el contenido al final del fichero sin eliminar la información existente
 
@@ -441,11 +441,11 @@ Get-NetTCPConnection | Where-Object{$_.State -eq 'Established'} | Format-Table -
 
 # 4. Formateando, ordenando y filtrando resultado
 
-PowerShell permite modelar los resultados de la ejecución de los CmdLets.
+***PowerShell*** permite modelar los resultados de la ejecución de los CmdLets.
 
 Esto permite proveer al usuario de visión adaptada a las necesidades de cada momento, para que la interpretación de los valores obtenidos se más intuitiva y sencilla
 
-Al mismo tiempo, estos resulados los podemos ordenar y filtrar
+Al mismo tiempo, estos resultados los podemos ordenar y filtrar
 
 ## 4.1. Formateando la salida de los CmdLets
 
@@ -470,7 +470,7 @@ Format-List
 ***Ejemplos de uso:***
 
 ```PowerShell
-Get-Process -name PowerShell | Format-List
+Get-Process -name ***PowerShell*** | Format-List
 Get-Process | Format-List -Property id, name            # Muestra solo las propiedades concretas
 ```
 
@@ -566,7 +566,7 @@ Get-Process | Where-Object { $_.PriorityClass -eq "Normal"}     # Servicios con 
 ```
 
 - **Notas**: 
-  - `$_`  : representa el conjunto total de elementos como resultado de la ejecución del comando anteior a la tuberia
+  - `$_`  : representa el conjunto total de elementos como resultado de la ejecución del comando anterior a la tubería
   - `&_.` : el punto (`.`) se utiliza para especificar una propiedad de todas las obtenidas entre los resultados del comando 
 
 
@@ -601,7 +601,7 @@ Permite filtrar objetos de entre todos los resultado obtenidos tras las ejecuci�
 
 ***Sintaxis***
 
-`Where-Objetc ` tiene una variedad de usos muy elevada, tal y como podemos ver en la [documentación de Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/where-object?view=powershell-7.3). Básicamente, la sintaxis sigue las iguiente regla:
+`Where-Object ` tiene una variedad de usos muy elevada, tal y como podemos ver en la [documentación de Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/where-object?view=powershell-7.3). Básicamente, la sintaxis sigue las iguiente regla:
 
 ``` powershell
 Where-Object
@@ -644,7 +644,7 @@ Tabién es interesante el parámetro `-match` que comprueba is una cadena sigue 
 'Fich1' -match '.[aeiou]'  # True porque encuentra alguna vocal después de un carácter
 'Fch1' -match '.[aeiou]'   # False porque no encuentra alguna vocal después de un carácter
 'aFch1' -match '^.[aeiou]'     # False porque no encuentra al principio un carácter seguido de una vocal
-'pce-01' -match '[A-Z]*-\d\d'   # Empieza por una mayúscula y tiene algo , una guión y dos números
+'pce-01' -match '[A-Z]*-\d\d'   # Empieza por una mayúscula y tiene algo , una guion y dos números
 "-5" -match "^[+-]?[0-9]+" #para un número que puede comenzar por + y por menos
 "correo@correo.com" -match "[a-zA-Z0-9_%+-.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" # para correos electrónicos
 ```
@@ -686,7 +686,7 @@ Get-Module -ListAvailable | where {
 
 # 5. CmdLets para la gestión de **servicios** y **procesos**
 
-Para un administrador de sistemas, uno de los elementos principales es la gestíon y control de los servicios de que dispone un sistema, los servicios que estan en marcha o parados así como los procesos que se estan ejecutado en un moemnto determinado 
+Para un administrador de sistemas, uno de los elementos principales es la gestión y control de los servicios de que dispone un sistema, los servicios que están en marcha o parados así como los procesos que se están ejecutado en un momento determinado 
 
 Veamos a continuación una serie de comandos enfocados a la gestión de *procesos* y *servicios*
 
@@ -704,7 +704,7 @@ gsv -Name a* # alias
 gsv -displayname "*hora*"
 ```
 
-- Servicios que tengan cuyo nombre comience por una vocal (manuscula o minuscula)
+- Servicios que tengan cuyo nombre comience por una vocal (mayúscula o minúscula)
 ```powershell
 Get-Service | Where-Object { $_.name -match '^[aeiou]'}
 ```
@@ -762,7 +762,7 @@ Eliminar un proceso por el número de *id*
 Stop-Process -id 8208
 ```
 
-**Ejemplo**: Eliminar un proceso. Por varios metodo, pero por ejemplo, por su nombre
+**Ejemplo**: Eliminar un proceso. Por varios método, pero por ejemplo, por su nombre
 ```powershell
 Get-Process -name "notepad" | Stop-Process
 Stop-Process -ProcessName notepad
@@ -771,7 +771,7 @@ Stop-Process -ProcessName notepad
 Get-Process -name "notepad" | Where-Object {$_.kill()}
 ```
 
-**Ejemplo**: En este ejemplo vamos a si tenemos el método que mata **(kill)**: Si lo ejecutas sale el listado, y tambien puedes ver las propiedades, etc...
+**Ejemplo**: En este ejemplo vamos a si tenemos el método que mata **(kill)**: Si lo ejecutas sale el listado, y también puedes ver las propiedades, etc...
 ```powershell
 Get-Process Notepad | Get-Member -MemberType method
 
@@ -827,7 +827,7 @@ ls c:\windows | ?{ ($_.LastWriteTime -gt (get-date "2021-01-01")) -and ($_.lengt
 # Con operadores lógicos negados y expresiones regulares negadas
 Get-ChildItem c:\windows | ?{($_.FullName -notlike "*.exe")}
 
-# muestra los fichero con atributos reanonly
+# muestra los fichero con atributos readonly
 Get-ChildItem c:\windows | ?{$_.Attributes -match "readonly"} 
 
 # responding --> muestra los procesos que NO responden 
@@ -875,7 +875,7 @@ Get-ChildItem | % {$_.CopyTo('c:\temp\'+$_.Name)} # % es el alias de forEach-Obj
 Get-ChildItem C:\temp\*.md | ForEach-Object {$_.Delete()}
 
 # lo mismo, sin usar el m?todo y usando un cmdlet
-Get-ChildItem C:\temp\*.md | ForEach-Object { renove-item $_.FullName}
+Get-ChildItem C:\temp\*.md | ForEach-Object { remove-item $_.FullName}
 
 # Copiar fichero, cambiando la extensión y usando funciones
 Get-ChildItem *.txt | ForEach-Object {$_.CopyTo($pwd.Path+"\"+$_.BaseName+".texto")}
@@ -887,13 +887,13 @@ Get-ChildItem *.txt | ForEach-Object {$_.CopyTo($pwd.Path+"\"+$_.BaseName+".text
 
 ### 6.1.1. Objetos **WMI**
 
-**WMI**: *Windows Management Instrumentation*. Esta previamente instalado y es una herramienta que sirve para gestionar los elelemtos Hardware de nuestro sistema a través de PowerShell
+**WMI**: *Windows Management Instrumentation*. Esta previamente instalado y es una herramienta que sirve para gestionar los elelemtos Hardware de nuestro sistema a través de ***PowerShell***
 
 Por ejemplo, podemos obtener información del sistema
 ```powershell
-Get-WmiObject -class win32_processor    # Muestra informaicón del procesador
-Get-WmiObject -class win32_logicaldisk  # discos lógios
-Get-WmiObject -class win32_BIOS         # infomración de la BIOS
+Get-WmiObject -class win32_processor    # Muestra información del procesador
+Get-WmiObject -class win32_logicaldisk  # discos lógicos
+Get-WmiObject -class win32_BIOS         # información de la BIOS
 Get-WmiObject -list                     # lista todos los elementos posibles
 ```
 
@@ -904,9 +904,9 @@ A diferencia de `WMI` lo hace todo con el comando `get-WmiObject` con `WMIC` ten
 
 ```powershell
 wmic /output:stdout bios get /all /format:list         # información del a BIos
-wmic /output:stdout CPU get /all /format:list	       # inforamción de la CPU
-wmic /output:cpu.txt CPU get /all /format:list	       # inforamción de la CPU
-wmic /output:stdout nicconfig get /all /format:list    # inforamción de las tarjetas de red
+wmic /output:stdout CPU get /all /format:list	       # información de la CPU
+wmic /output:cpu.txt CPU get /all /format:list	       # información de la CPU
+wmic /output:stdout nicconfig get /all /format:list    # información de las tarjetas de red
 wmic /output:stdout diskdrive get /all /format:list    # información de los discos físicos
 wmic /output:stdout logicaldrive get /all /format:list # información de los discos físicos
 wmic /output:stdout recoveros get /all /format:list    # información sobre los errores del sistema operativo
@@ -917,9 +917,9 @@ wmic /output:stdout recoveros get /all /format:list    # información sobre los 
 wmic process call create "Notepad.exe" # ejecuta el notepad
 ```
 
-## 6.2. PowerShell para consultar el **registro de windows**
+## 6.2. ***PowerShell*** para consultar el **registro de windows**
 
-Desde `PowerShell` podemos acceder al registro de Windows únicamente para ***consulta***.
+Desde ***PowerShell*** podemos acceder al registro de Windows únicamente para ***consulta***.
 
 Veamos ejemplos de acceso a las opciones de desinstalado, y podemos iterar sobre ellas como con todos los objetos 
 ```powershell

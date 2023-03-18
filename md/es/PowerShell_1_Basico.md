@@ -4,6 +4,10 @@ description: Introducción a PowerShell
 permalink: /PowerShell_1_Basico/
 ---
 
+<h1>Introducción a PowerShell</h1>
+
+<h3>Tabla de contenidos</h3>
+
 - [1. Introducción](#1-introducción)
   - [1.1. Ventajas de **PowerShell**](#11-ventajas-de-powershell)
   - [1.2. Formato de los comandos](#12-formato-de-los-comandos)

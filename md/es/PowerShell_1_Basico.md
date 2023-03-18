@@ -22,6 +22,8 @@ permalink: /PowerShell_1_Basico/
   - [2.4. `Get-Date`](#24-get-date)
   - [2.5. Comandos para la gestión de Archivos y Carpetas](#25-comandos-para-la-gestión-de-archivos-y-carpetas)
 - [3. Tuberias y redirecciones](#3-tuberias-y-redirecciones)
+  - [3.1. Tuberías](#31-tuberías)
+  - [3.2. Redireccionamiento](#32-redireccionamiento)
 - [4. Formateando, ordenando y filtrando resultado](#4-formateando-ordenando-y-filtrando-resultado)
   - [4.1. Formateando la salida de los CmdLets](#41-formateando-la-salida-de-los-cmdlets)
     - [4.1.1. `Format-List`](#411-format-list)
@@ -325,27 +327,117 @@ Pero **nosotros utilizaremos exclusivamente los comandos de powershell**
 
 # 3. Tuberias y redirecciones
 
-El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma en Powershell, pero su uso es aun más intensivo, ya que la información que muestran los comandos, el formato de salida, etc, se controla usando este mecanismo.
+En ocasiones, un comando no es suficiente para obtener toda la información que necesitamos o realizar una acción completa, por ejemplo 
+
+- Supongamos que debemos obtener los ficheros con un determinado tamaño y además ordenados de una forma específica
+- O queremos que al obtener un listado de ficheros, guardar este listado directamente en un archivo
+
+Para ello tenemos las tuberias y redirecciones
 
 En el siguiente enlace de [Profesional Review: Redirecciones y Tuberias en línux](https://www.profesionalreview.com/2017/02/19/redirecciones-tuberias-linux/) tienes más información
+
+## 3.1. Tuberías
+
+El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma en Powershell, pero su uso es aun más intensivo, ya que la información que muestran los comandos, el formato de salida, etc, se controla usando este mecanismo.
+
+Permite conectar la salida de un cmdlet con la entrada de otro, para tratar la información de inicio, por ejemplo teniendo en cuenta el primer ejemplo anterior:
+
+  - Con un comando obtengo el listado de fichero
+  - A partir del listado de ficheros obtenidos los filtro al tamaño demandado
+  - Una vez filtrados los ficheros, los ordeno según el orden establecido
+
+O sea, utilizaremos una ***tubería*** o ***pipe*** para enlazar los comandos
 
 <div align="center">
     <img src="../img/01_tuberías.png" alt="Redirecciones y tuberias" width="70%" />
 </div>
 
-Ejemplo:
+Ejemplos de tuberías:
 
+Queremos obtener el listado de arhivos y carpetas de un directorio grande sin perdernos nada, poco a poco
 ```powershell
-# Tubería para realizar paradas de la salida del comando ls
-ls c:\windows | more 
+# Primero conseguimos los ficheros
+Get-ChildItem c:\Winwdows
 
-# Redireccionamiento de salida para guardar en el archivo indicado la lista de archivos y directorios del subdirectorio Windows.
-ls c:\windows > fichero.txt 
-
-# Lo mismo que el anterior pero añadiendo la información al final del archivo indicado.
-ls c:\windows >> fichero.txt 
+# Ahora mediante una tubería para realizar paradas de la salida del comando Get-ChildItem
+Get-ChildItem c:\windows | more 
 ```
 
+Para contar la cantidad de comandos diferentes de PowerSHell
+
+```powershell
+# primero obtenemos los comandos
+Get-Command 
+
+# Después a partir del listado anterior, los contamos
+Get-Command | Measure-Object
+```
+Supongamos que queremos los ficheros de mas de 10NB ordenado por su tamaño descendientemente
+
+```powershell
+# primero obtenemos los fichero
+Get-ChildItem 
+
+# sobre este listado de ficheros, filtramos los que tiene mas de 100KB
+Get-ChildItem | Where-Object {$_.Length -gt 100KB}
+
+# y ahora los ordemanmos
+Get-ChildItem | Where-Object {$_.Length -gt 100KB} | Sort-Object -Descending -Property Length
+
+# una variante
+Get-ChildItem  -Recurse | Where-Object {$_.Length -gt 100KB} | Sort-Object -Descending -Property Length
+```
+
+Otro ejemplo, necesitamos saber los puertos sobre los que hay una conexión activa
+```powershell
+# Primero obtenemos los listado de puartos del equpo
+Get-NetTCPConnection
+
+# Ahora necesitamos filtrar las que tiene estado activo; state = Established
+Get-NetTCPConnection | Where-Object{$_.State -eq 'Established'}
+
+# Si además no lo vemos bien, y queremos tener un mejor formato de salida
+Get-NetTCPConnection | Where-Object{$_.State -eq 'Established'} | Format-Table -a
+```
+
+## 3.2. Redireccionamiento
+
+Las redirecciones nos permiten enviar los resultados a un lugar diferente de la pantalla. Normalmente a un archivo
+
+Tenemos dos simbolos para hacer eso
+- `>` : Crea un nuevo archivo y deposita la salida del cmdlet. Si el archivo ya existe, lo sobre escribe y por lo tanto se elimina su contenido previo.
+- `>>` : Añade la salida del cmdlet al archivo existente. Si el fichero no existe lo crea y añade el contenido, y si existe, añade el contenido al final del fichero sin eliminar la información existente
+
+Ejemplo:
+
+Veamos dos ejemplos, para ver las diferencias
+
+Vamos a intentar tener en un fichero tanto listado de ficheros y carpetas como fecha actual
+```powershell
+# Redireccionamiento de salida para guardar en el archivo indicado la lista de archivos y directorios del subdirectorio Windows.
+Get-ChildItem c:\windows > fichero.txt 
+# Queremos añadir la fecha
+Get-Date > fichero.txt
+# En este caso hemos eliminado el listado inicial
+Get-Content fichero.txt
+```
+
+Ahora lo repetimos de forma correcta
+```powershell
+# Lo mismo que el anterior pero añadiendo la información al final del archivo indicado.
+Get-ChildItem c:\windows > fichero.txt
+Get-Date >> fichero.txt
+# en este caso hemos añadido la fecha al final y no se ha eliminado nada 
+Get-Content
+```
+
+Por último podemos unir tuberías y redireccionamiento:
+
+Por ejemplo, queremos guardar el listado de puertos abiertos en un fichero, con lo que usamos el último ejemplo visto en tuberías y la salida la hacemos sobre un fichero en vez de en pantalla
+
+```powershell
+Get-NetTCPConnection | Where-Object{$_.State -eq 'Established'} | Format-Table -a > ListaPuertosAbiertos.txt
+```
 
 # 4. Formateando, ordenando y filtrando resultado
 

@@ -1,8 +1,7 @@
 ---
-layout: default
 title: PowerShell Scripting
 description: 
-permalink: /PowerShell3/
+permalink: /PowerShell_3_Scripting/
 ---
 
 # Scripts powershell

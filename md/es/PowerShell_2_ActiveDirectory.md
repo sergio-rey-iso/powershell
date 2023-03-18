@@ -1,7 +1,6 @@
 ---
-layout: default
 title: PowerShell AD
-permalink: /PowerShell2/
+permalink: /PowerShell_2_ActiveDirectory/
 ---
 
 

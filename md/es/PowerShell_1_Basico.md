@@ -1,10 +1,7 @@
 ---
-layout: default
 title: PowerShell Básico
 description: Introducción a PowerShell
-permalink: /PowerShell1/
-show_downloads: true
-
+permalink: /PowerShell_1_Basico/
 ---
 
 # Introducción

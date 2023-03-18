@@ -54,42 +54,42 @@ get-history -id 7       # Muestra solamente el comando número 7 de la lista
 ### El concepto VERBO–SUSTANTIVO
 
 Los **verbos** expresan acciones concretas en WPS.
-- Get : obtiene
-- Set : aplica
-- Remove : elimina
-- New : crea nuevo
-- Clear : Limpia
+- `Get` : obtiene
+- `Set` : aplica
+- `Remove` : elimina
+- `New` : crea nuevo
+- `Clear` : Limpia
 
 Los **sustantivos** son muy parecidos a los de cualquier idioma, ya que describen tipos de objetos concretos que son importantes para la administración del sistema
 Los sustantivos están menos limitados, pero deben describir siempre a qué se aplica un comando. 
-- Command
-- History
-- ChildItem
-- LocalUser
-- LocalGroup
-- NetAdapter
-- Partition
-- Host
+- `Command`
+- `History`
+- `ChildItem`
+- `LocalUser`
+- `LocalGroup`
+- `NetAdapter`
+- `Partition`
+- `Host`
 
 Por ejemplo: 
 
 ```powershell
-Get-Process, Stop-Process, Get-Service y Stop-Service   # Se aplican a procesos y servicios.
-Get-LocalUser y Get-LocalGroup                          # Obtiene los usuarios y grupos locales del equipo
 Get-Date                                                # Obtiene la fecha del sistema
 Clear-Host                                              # Limpia la pantalla
 Get-Location                                            # nos dice donde nos encontramos
 Get-ChildItem                                           # Obtiene los elementos de la carpeta actual
 Get-NetAdapter                                          # Tarjetas de red del sistema
+Get-LocalUser y Get-LocalGroup                          # Obtiene los usuarios y grupos locales del equipo
+Get-Process, Stop-Process, Get-Service y Stop-Service   # Se aplican a procesos y servicios.
 ```
 
 Como vemos es muy complejo acordarse de todos los comandos, pero tenemos un sistema para intentar descubrir los comandos:
-```
-Get-Command –Verb Get                                   # Visualiza los cmdlets que usan el verbo Get
-Get-Command -Noum LocalGroup                            # Todos los comandos que tienen algo de LocalGroup
-Get-Commando *localgroup*                               # parecido al anterior, pero más amplio
-Get-Command –noun Service                               # Visualiza cmdlets con sustantivo indicado
-Get-Command -name Clear-Host                            # Muestra información de lo indicado a través del nombre, en este caso es una función.
+```powershell
+Get-Command –Verb Get            # Visualiza los cmdlets que usan el verbo Get
+Get-Command -Noum LocalGroup     # Todos los comandos que tienen algo de LocalGroup
+Get-Commando *localgroup*        # parecido al anterior, pero más amplio
+Get-Command –noun Service        # Visualiza cmdlets con sustantivo indicado
+Get-Command -name Clear-Host     # Muestra información de lo indicado a través del nombre, en este caso es una función.
 ```
 
 
@@ -170,7 +170,7 @@ Get-Command | Where-Object{ $_.Name -like '*alias'} #Retorna
 
 Un **Alias** asocia un nombre de comando con otro comando. Se usan para evitar frustrar al usuario al usar un nuevo Shell. Hay de unix7linux como de ms-dos/cmd.
 
-## `Get-Alias`
+### `Get-Alias`
 
 Obtiene los alias o un alias en concreto:
 
@@ -189,7 +189,7 @@ Get-Alias -Name gp*, sp* -Exclude *ps
 Get-Alias -Definition Get-ChildItem   # muestra todos los alias que utilizan Get-ChildItem
 ```
 
-## `Set-Alias`
+### `Set-Alias`
 
 Crea o modifica un alias
 
@@ -217,7 +217,7 @@ Set-Alias -Name np -Value C:\Windows\notepad.exe    #Creando un alias a un ejecu
  ``` 
 Más información sobre Alias en PowerShell: [PowerShell: List of Aliases](http://xahlee.info/powershell/powershell_aliases.html)
 
-## `Get-Date`
+### `Get-Date`
 
 Para obtener la fecha. Ejemplos:
 
@@ -226,45 +226,53 @@ Get-Date
 Get-Date -UFormat %Y%m%d_%H%M%S	#Formato: 20200502_101213
 Get-Date -UFormat "%d/%m/%Y %H:%M:%S"	#02/05/2020 09:52:24
 Get-Date -UFormat "%A, %d de %B de /%Y %T %Z"	#sábado, 02 de mayo de /2020 09:55:29 +02
-
+```
 
 # Comandos para la gestión de Archivos y Carpetas
 
+Para la gestión de archivos y carpeta con ***powershell***, además de los alias creados en el sistema, tenemos los siguientes comandos nativos:
+
 - `Get-Location` (pwd): Ruta o path actual
-
 - `Set-Location` (cd): Para desplazarse.
-
 - `Get-ChildItem` (ls): Muestra el contenido.
-
 - `New-Item`  (ni/md): Para crear archivos y carpetas.
-
 - `Remove-Item` (rm): Para Borrar archivos y carpetas.
-
 - `Move-Item` (mv): Para mover archivos y carpetas.
-
 - `Rename-Item` (ren): Para renombrar archivos y carpetas.
-
 - `Copy-Item` (cp): Para copiar archivos y carpetas.
-
 - `Get-Content` (cat): Para mostrar el contenido de un fichero
 
 
 
 Ejemplos:
-```ps
+```powershell
+Get-ChildItem                           # Muestra los archivos de la carpeta actual
 Get-ChildItem c:\ -Attributes hidden    # Muestra los archivos ocultos de c:\
+
 New-Item Prueba1 -itemType Directory    # Crea una carpeta
 New-Item .\Prueba1\texto1.txt           # Crea un fichero dentro de la carpeta anterior
+
 Remove-Item .\Prueba1\ -recurse         # Elimina el directory
+
 New-Item Foto1.jpg,Foto2.jpg
 New-Item Fotos -ItemType Directory
+
 Move-Item *.jpg .\Fotos\                # Mueve todos los archivos .jpg a la carpeta Fotos
-Rename-Item .\Fotos\ Recuerdos                  # Renombra una carpeta
+
+Rename-Item .\Fotos\ Recuerdos          # Renombra una carpeta
+
 Copy-Item .\Recuerdos\ CopiaRecuerdos -recurse  # Copia en una nueva carpeta la carpeta existente Recuerdos
+
 Get-Date > prueba.txt                   # Crea un nuevo fichero que contiene la información de la fecha
+
 Get-Content .\prueba.txt                # Muestra el contenido del fichero anterior
 ```
 
+> **Nota:** Como se ha comentado también podemos usar los alias para trabajar con fichero y carpetas dentro de ***powershell***:
+> - El alias `ls` corresponde al cmdlet `get-ChildItem `
+> - Los alias `cat` ó `type` a `Get-Content`
+> 
+Pero **nosotros utilizaremos exclusivamente los comandos de powershell**
 
 # Tuberias y redirecciones
 
@@ -272,23 +280,31 @@ El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma 
 
 En el siguiente enlace de [Profesional Review: Redirecciones y Tuberias en línux](https://www.profesionalreview.com/2017/02/19/redirecciones-tuberias-linux/) tienes más información
 
+<div align="center">
+    <img src="../img/01_tuberías.png" alt="Redirecciones y tuberias" width="70%" />
+</div>
+
 Ejemplo:
 
 ```powershell
-ls c:\windows | more # Tubería para realizar paradas de la salida del comando ls
-ls c:\windows >fichero.txt # Redireccionamiento de salida para guardar en el archivo indicado la lista de archivos y directorios del subdirectorio Windows.
-ls c:\windows >>fichero.txt # Lo mismo que el anterior pero añadiendo la información al final del archivo indicado.
-```
+# Tubería para realizar paradas de la salida del comando ls
+ls c:\windows | more 
 
-Para ver el contenido de estos ficheros podemos usar los alias cat o type.
-- El alias `ls` corresponde al cmdlet `get-ChildItem `
-- `cat` ó `type` a `Get-Content`
+# Redireccionamiento de salida para guardar en el archivo indicado la lista de archivos y directorios del subdirectorio Windows.
+ls c:\windows > fichero.txt 
+
+# Lo mismo que el anterior pero añadiendo la información al final del archivo indicado.
+ls c:\windows >> fichero.txt 
+```
 
 
 # Formateando y ordenando la salida
-## `Format-List`
+### `Format-List`
 
 Forma en un listado 
+
+***Sintasis***
+
 ```
 Format-List
       [[-Property] <Object[]>]
@@ -300,14 +316,20 @@ Format-List
       [-InputObject <psobject>]
       [<CommonParameters>]
 ```
+
+***Ejemplos de uso:***
+
 ```PowerShell
 Get-Process -name PowerShell | Format-List
 Get-Process | Format-List -Property id, name            # Muestra solo las propiedades concretas
 ```
 
-## `Format-Wide`
+### `Format-Wide`
 
 Formatea en columnas, las que indiquemos o quepan
+
+***Sintasis***
+
 ```
 Format-Wide
       [[-Property] <Object>]
@@ -322,13 +344,19 @@ Format-Wide
       [-InputObject <psobject>] 
       [<CommonParameters>]
 ```
+
+***Ejemplos de uso:***
+
 ```PowerShell
 Get-ChildItem | Format-wide -column 3                   # muestra el listado en 3 columnas
 ```
 
-## `Format-Table`
+### `Format-Table`
 
 Formatear en una especie de tabla
+
+***Sintasis***
+
 ```
 Format-Table
       [-AutoSize]
@@ -346,14 +374,18 @@ Format-Table
       [<CommonParameters>]
 ```
 
+***Ejemplos de uso:***
+
 ```powershell
 Get-Process | Format-Table -property id, ProcessName
 Get-Process | format-Table -groupby ProcessName -property id, ProcessName # Además agrupa
 ```
 
-## `Sort-Object`
+### `Sort-Object`
 
 Ordena el listado por una o varias propiedades. 
+
+***Ejemplos de uso:***
 
 ```powershell
 Get-Process | Sort-Object -property id -desc
@@ -362,17 +394,18 @@ Get-Process | Sort-Object -property id | Format-Table -property id, ProcessName
 
 Recordad que si deseamos conocer todas las propiedades de un comando, tenemos el cmdlet `Get-Member` que nos muestra todos los objetos que forman parte del comando y mediante `-MemberType Property` filtramos únicamente todas las propiedades del comando.
 
-En este caso, vamos a utilizar el comando a traves de una *pipe* o tub*ería.
+En este caso, vamos a utilizar el comando a traves de una *pipe* o ***tubería***.
 
 ```powershell
 ls | Get-Member -MemberType Property	# muestra las propiedades del comando.
 ```
 
-## `Where-Object`
+### `Where-Object`
 
 Permite realizar un filtro mediante una condición concreta entre los resultados de un comando determinado. Siempre se utiliza después de una tubería
 
-Ejemplo: 
+***Ejemplos de uso:***
+
 ```powershell
 Get-Service                                                     # Muestra todos los servicios del sistema
 Get-Service | Where-Object { $_.Status -like 'Running'}         # Servicio con estado *Running*
@@ -380,19 +413,22 @@ Get-Process | Where-Object { $_.PriorityClass -eq "Normal"}     # Servicios con 
 ```
 
 - **Notas**: 
-  - `$_` representa el conjunto total de elementos como resultado de la ejecución del comando anteior a la tuberia
-  - `&_.` el punto (`.`) se utiliza para especificar una propiedad de todas las obtenidas entre los resultados del comando 
+  - `$_`  : representa el conjunto total de elementos como resultado de la ejecución del comando anteior a la tuberia
+  - `&_.` : el punto (`.`) se utiliza para especificar una propiedad de todas las obtenidas entre los resultados del comando 
 
 
-Más ejemplos: 
+***Más ejemplos: ***
+
 ```powershell
 Get-ChildItem | Where-Object {$_.FullName -match '[a-z]+\.*txt$'}                                       # donde el nombre "algo" y luego termine por .txt
 Get-ChildItem | Where-Object {$_.Length -ge 1000 -and $_.LastAccessTime -gt (Get-Date '2020/03/30')}    # listar archivos que sean de mas de 1000 kb y que el último acceso sea posterior a una fecha
 ```
 
-## `Select-Object`
+### `Select-Object`
 
 Seleccionar objetos que vienen de la tubería. 
+
+***Ejemplos de uso:***
 
 ```powershell
 Get-ChildItem c:\ | Select-Object -first 5 -unique
@@ -406,15 +442,104 @@ Get-Process | Select-Object -Property ProcessName, Id, WS                   # Ob
 Get-Process Notepad  | Select-Object id, ProcessName, StartTime -First 3    # Seleccionar 3 propiedades pero solo los 3 primeros registros
 ```
 
+### `Where-Object`
+
+Permite filtrar objetos de entre todos los resultado obtenidos tras las ejecución de un comando
+
+***Sintaxis***
+
+`Where-Objetc ` tiene una variedad de usos muy elevada, tal y como podemos ver en la [documentación de Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/where-object?view=powershell-7.3). Básicamente, la sintaxis sigue las iguiente regla:
+
+``` powershell
+Where-Object
+     [-InputObject <PSObject>]
+     [-Property] <String>
+     [[-Value] <Object>]
+     [-EQ]
+     [<CommonParameters>]
+```
+
+Donde [-EQ] pueden ser cualquier tipo de comparador, como por ejemplo
+- `-eq`, `-ne`, `-gt`, `-ge`, `-lt`, `-le`
+- `-like` : Comparaciones con comodines.
+
+```
+powershell -like 'power'
+powershell -like 'power*'
+powershell -like 'po?er*'
+```
+
+Tabién es interesante el parámetro `-match` que comprueba is una cadena sigue **un patron** determinado:
+
+- [`-match`](https://docs.microsoft.com/es-es/powershell/module/microsoft.powershell.core/about/about_regular_expressions?view=powershell-7.1)
+
+
+```powershell
+'coordinar' -match 'oo'
+'coordinar' -match 'o'
+'coordinar' -match 'oooo'
+'Fin' -match 'F[iou]n'
+'Fan' -match 'F[iou]n'
+'Fin' -match 'F[^iou]n'
+42 -match '[0-9][0-9]'     # filtramos que solo san dos número
+'4X' -match '[0-9][0-9]'
+'4X' -match '[0-9][A-Z]'   # Validando también alfanuméricos: debe ser una cadena lo que evaluemos
+'A3' -match '[A-Z][A-Z]'   # da falso
+'pc-01' -match 'pc-\d\d'   # Filtra que haya dos dígitos decimales al final     
+'palabra' -match '\w'      # da verdadero porque \w indica una palabra
+'Fich1' -match '.....'     # Cada . representa un punto: si hay más caracteres que puntos también es correcto
+'Fich1' -match '.[aeiou]'  # True porque encuentra alguna vocal después de un carácter
+'Fch1' -match '.[aeiou]'   # False porque no encuentra alguna vocal después de un carácter
+'aFch1' -match '^.[aeiou]'     # False porque no encuentra al principio un carácter seguido de una vocal
+'pce-01' -match '[A-Z]*-\d\d'   # Empieza por una mayúscula y tiene algo , una guión y dos números
+"-5" -match "^[+-]?[0-9]+" #para un número que puede comenzar por + y por menos
+"correo@correo.com" -match "[a-zA-Z0-9_%+-.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" # para correos electrónicos
+```
+
+- etc...
+
+Veremos más ejemplos tras la siguiente sección.
+
+```powershell
+# Use Where-Object to get commands that have any value for the OutputType property of the command.
+# This omits commands that do not have an OutputType property and those that have an OutputType
+# property, but no property value.
+Get-Command | where OutputType
+Get-Command | where {$_.OutputType}
+
+# Use Where-Object to get objects that are containers.
+# This gets objects that have the **PSIsContainer** property with a value of $True and excludes all
+# others.
+Get-ChildItem | where PSIsContainer
+Get-ChildItem | where {$_.PSIsContainer}
+
+# Finally, use the Not operator (!) to get objects that are not containers.
+# This gets objects that do have the **PSIsContainer** property and those that have a value of
+# $False for the **PSIsContainer** property.
+Get-ChildItem | where {!$_.PSIsContainer}
+# You cannot use the Not operator (!) in the comparison statement format of the command.
+Get-ChildItem | where PSIsContainer -eq $False
+```
+
+y un ejemplo con multiples condiciones:
+
+```powershell
+Get-Module -ListAvailable | where {
+    ($_.Name -notlike "Microsoft*" -and $_.Name -notlike "PS*") -and $_.HelpInfoUri
+}
+```
 
 
 
+# CmdLets para la gestión de **servicios** y **procesos**
 
+Para un administrador de sistemas, uno de los elementos principales es la gestíon y control de los servicios de que dispone un sistema, los servicios que estan en marcha o parados así como los procesos que se estan ejecutado en un moemnto determinado 
 
+Veamos a continuación una serie de comandos enfocados a la gestión de *procesos* y *servicios*
 
-# CmdLista para la gestión de SERVICIOS
+## Gestión de servicios
 
-## `Get-Service`
+### `Get-Service`
 Obtiene el listado de servicios del equipo:
 
 ```powershell
@@ -440,8 +565,10 @@ Get-Service s* | Select-Object name, DependentServices
 Get-Service SstpSvc | Select-Object name, DependentServices | select -ExpandProperty dependentServices
 ```
 
-## `Start-Service`
-- Activando un servicio
+### `Start-Service`
+
+Inicia un servicio
+
 ```powershell
 gsv -displayname "*hora*"
 Start-Service W32Time
@@ -457,25 +584,27 @@ Get-Service | where {$_.DisplayName -like "*host*"} | Where-Object {$_.Status -l
 Get-Service s* | Select-Object name, RequiredServices, DependentServices
 ```
 
-# cmdLets para la gestión de PROCESOS.
+## Gestión de procesos
 
-## `Get-Process`
+### `Get-Process`
 
-Listar procesos
+- Listar procesos
 ```powershell
 Get-Process -name se*
 ```
 
-## `Start-Process`
+### `Start-Process`
 
-Iniciar un proceso
+Iniciar/arrancar un proceso
+
 ```powershell
 Start-Process notepad
 ```
 
-## `Stop-Process`
+### `Stop-Process`
 
-Eliminar un proceso por el n?mero de id
+Eliminar un proceso por el número de *id*
+
 ```powershell
 Stop-Process -id 8208
 ```
@@ -489,7 +618,7 @@ Stop-Process -ProcessName notepad
 Get-Process -name "notepad" | Where-Object {$_.kill()}
 ```
 
-### Para ver si tenemos el método que mata **(kill)**: Si lo ejecutas sale el listado, y tambien puedes ver las propiedades, etc...
+**Ejemplo**: En este ejemplo vamos a si tenemos el método que mata **(kill)**: Si lo ejecutas sale el listado, y tambien puedes ver las propiedades, etc...
 ```powershell
 Get-Process Notepad | Get-Member -MemberType method
 
@@ -525,42 +654,7 @@ Get-Process s* | Select-Object id, ProcessName, CPU | Sort-Object -Property cpu 
 ps -name s* | sort cpu -desc | select id, ProcessName, cpu -first 5 #solo 5
 ```
 
-# FILTROS: 
-
-## `Where-Object`
-Filtrado de contenidos mediante mecanismo de tubería más `Where-Object` 
-Utilizan
-- `-eq`, `-ne`, `-gt`, `-ge`, `-lt`, `-le`
-- `-like` : Comparaciones con comodines.
-```
-powershell -like 'power'
-powershell -like 'power*'
-powershell -like 'po?er*'
-```
-- [`-match`](https://docs.microsoft.com/es-es/powershell/module/microsoft.powershell.core/about/about_regular_expressions?view=powershell-7.1)
-```powershell
-'coordinar' -match 'oo'
-'coordinar' -match 'o'
-'coordinar' -match 'oooo'
-'Fin' -match 'F[iou]n'
-'Fan' -match 'F[iou]n'
-'Fin' -match 'F[^iou]n'
-42 -match '[0-9][0-9]'     # filtramos que solo san dos número
-'4X' -match '[0-9][0-9]'
-'4X' -match '[0-9][A-Z]'   # Validando también alfanuméricos: debe ser una cadena lo que evaluemos
-'A3' -match '[A-Z][A-Z]'   # da falso
-'pc-01' -match 'pc-\d\d'   # Filtra que haya dos dígitos decimales al final     
-'palabra' -match '\w'      # da verdadero porque \w indica una palabra
-'Fich1' -match '.....'     # Cada . representa un punto: si hay más caracteres que puntos también es correcto
-'Fich1' -match '.[aeiou]'  # True porque encuentra alguna vocal después de un carácter
-'Fch1' -match '.[aeiou]'   # False porque no encuentra alguna vocal después de un carácter
-'aFch1' -match '^.[aeiou]'     # False porque no encuentra al principio un carácter seguido de una vocal
-'pce-01' -match '[A-Z]*-\d\d'   # Empieza por una mayúscula y tiene algo , una guión y dos números
-"-5" -match "^[+-]?[0-9]+" #para un número que puede comenzar por + y por menos
-"correo@correo.com" -match "[a-zA-Z0-9_%+-.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$" # para correos electrónicos
-```
-
-- etc...
+## Ejemplos de filtros (`Where-Object`) con procesos y servicios: 
 
 **Ejemplos** con `Where-Object`
 
@@ -611,7 +705,8 @@ Get-ChildItem | ForEach-Object {$_.name + " ---> "  + $_.Length}
 0..10 | ForEach-Object{ "2 x " + $_ + " = " + $_*2}
 ```
 
-- **Ejemplo**: Contamos ficheros, 
+- **Ejemplo**: Contamos ficheros:
+
 ```powershell
 Get-ChildItem | ForEach-Object {$i++};echo $i
 $i=0; Get-Service | ForEach-Object{ $i++}; echo $i
@@ -633,31 +728,33 @@ Get-ChildItem C:\temp\*.md | ForEach-Object { renove-item $_.FullName}
 Get-ChildItem *.txt | ForEach-Object {$_.CopyTo($pwd.Path+"\"+$_.BaseName+".texto")}
 ```
 
-# OBJETOS **WMI**
+# **WMI**: *Windows Management Instrumentation*.
+
+## Objetos **WMI**
 
 **WMI**: *Windows Management Instrumentation*. Esta previamente instalado y es una herramienta que sirve para gestionar los elelemtos Hardware de nuestro sistema a través de PowerShell
 
-Por ejemplo, podemo obtener información del sistema
+Por ejemplo, podemos obtener información del sistema
 ```powershell
-Get-WmiObject -class win32_processor	#Muestra informaicón del procesador
-Get-WmiObject -class win32_logicaldisk	#discos lógios
+Get-WmiObject -class win32_processor    # Muestra informaicón del procesador
+Get-WmiObject -class win32_logicaldisk  # discos lógios
 Get-WmiObject -class win32_BIOS         # infomración de la BIOS
-Get-WmiObject -list 		#lista todos los elementos posibles
+Get-WmiObject -list                     # lista todos los elementos posibles
 ```
 
-# WMIC
+## WMIC
 
 A diferencia de `WMI` lo hace todo con el comando `get-WmiObject` con `WMIC` tenemos especie de extensión que se obtiene con el comando `wmic`. Una de las diferencias que con `wmic` debemos especificar las salidas.
 - wmic opciones_globales alias formatoDeSalida
 
 ```powershell
-wmic /output:stdout bios get /all /format:list #información del a BIos
-wmic /output:stdout CPU get /all /format:list	#inforamción de la CPU
-wmic /output:cpu.txt CPU get /all /format:list	#inforamción de la CPU
-wmic /output:stdout nicconfig get /all /format:list	#inforamción de las tarjetas de red
-wmic /output:stdout diskdrive get /all /format:list	#información de los discos físicos
-wmic /output:stdout logicaldrive get /all /format:list #información de los discos físicos
-wmic /output:stdout recoveros get /all /format:list #información sobre los errores del sistema operativo
+wmic /output:stdout bios get /all /format:list         # información del a BIos
+wmic /output:stdout CPU get /all /format:list	       # inforamción de la CPU
+wmic /output:cpu.txt CPU get /all /format:list	       # inforamción de la CPU
+wmic /output:stdout nicconfig get /all /format:list    # inforamción de las tarjetas de red
+wmic /output:stdout diskdrive get /all /format:list    # información de los discos físicos
+wmic /output:stdout logicaldrive get /all /format:list # información de los discos físicos
+wmic /output:stdout recoveros get /all /format:list    # información sobre los errores del sistema operativo
 ```
 
 -  Creación de objetos con ***wmic***
@@ -665,7 +762,7 @@ wmic /output:stdout recoveros get /all /format:list #información sobre los erro
 wmic process call create "Notepad.exe" # ejecuta el notepad
 ```
 
-# REGISTRO de windows
+# PowerShell para consultar el **registro de windows**
 
 Desde `PowerShell` podemos acceder al registro de Windows únicamente para ***consulta***.
 

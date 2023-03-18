@@ -4,7 +4,52 @@ description: Introducción a PowerShell
 permalink: /PowerShell_1_Basico/
 ---
 
-# Introducción
+- [1. Introducción](#1-introducción)
+  - [1.1. Ventajas de **PowerShell**](#11-ventajas-de-powershell)
+  - [1.2. Formato de los comandos](#12-formato-de-los-comandos)
+    - [1.2.1. El concepto VERBO–SUSTANTIVO](#121-el-concepto-verbosustantivo)
+  - [1.3. Ayudas en PowerShell](#13-ayudas-en-powershell)
+- [2. Algunos comandos básicos de `PowerShell`](#2-algunos-comandos-básicos-de-powershell)
+  - [2.1. `Get-Command`](#21-get-command)
+  - [2.2. `Get-Member`](#22-get-member)
+  - [2.3. Alias. Concepto y comandos.](#23-alias-concepto-y-comandos)
+    - [2.3.1. `Get-Alias`](#231-get-alias)
+    - [2.3.2. `Set-Alias`](#232-set-alias)
+  - [2.4. `Get-Date`](#24-get-date)
+  - [2.5. Comandos para la gestión de Archivos y Carpetas](#25-comandos-para-la-gestión-de-archivos-y-carpetas)
+- [3. Tuberias y redirecciones](#3-tuberias-y-redirecciones)
+- [4. Formateando, ordenando y filtrando resultado](#4-formateando-ordenando-y-filtrando-resultado)
+  - [4.1. Formateando la salida de los CmdLets](#41-formateando-la-salida-de-los-cmdlets)
+    - [4.1.1. `Format-List`](#411-format-list)
+    - [4.1.2. `Format-Wide`](#412-format-wide)
+    - [4.1.3. `Format-Table`](#413-format-table)
+  - [4.2. Ordenando los resultados de los CmdLets](#42-ordenando-los-resultados-de-los-cmdlets)
+    - [4.2.1. `Sort-Object`](#421-sort-object)
+  - [4.3. Filtrando los resultados de los CmdLets](#43-filtrando-los-resultados-de-los-cmdlets)
+    - [4.3.1. `Where-Object`](#431-where-object)
+    - [4.3.2. `Select-Object`](#432-select-object)
+    - [4.3.3. `Where-Object`](#433-where-object)
+- [5. CmdLets para la gestión de **servicios** y **procesos**](#5-cmdlets-para-la-gestión-de-servicios-y-procesos)
+  - [5.1. Gestión de servicios](#51-gestión-de-servicios)
+    - [5.1.1. `Get-Service`](#511-get-service)
+    - [5.1.2. `Start-Service`](#512-start-service)
+  - [5.2. Gestión de procesos](#52-gestión-de-procesos)
+    - [5.2.1. `Get-Process`](#521-get-process)
+    - [5.2.2. `Start-Process`](#522-start-process)
+    - [5.2.3. `Stop-Process`](#523-stop-process)
+    - [5.2.4. `Format-List`](#524-format-list)
+    - [5.2.5. `Sort-Object`](#525-sort-object)
+  - [5.3. Ejemplos de filtros (`Where-Object`) con procesos y servicios:](#53-ejemplos-de-filtros-where-object-con-procesos-y-servicios)
+- [6. Otros comandos](#6-otros-comandos)
+  - [6.1. **WMI**: *Windows Management Instrumentation*.](#61-wmi-windows-management-instrumentation)
+    - [6.1.1. Objetos **WMI**](#611-objetos-wmi)
+    - [6.1.2. WMIC](#612-wmic)
+  - [6.2. PowerShell para consultar el **registro de windows**](#62-powershell-para-consultar-el-registro-de-windows)
+
+
+
+
+# 1. Introducción
 
 ***Windows Powershell*** es un programa basado en línea de comandos que aporta a los administradores de sistemas una herramienta perfecta para automatizar tareas. El tradicional entorno CMD se quedaba pequeño para administrar sistemas operativos cada vez más orientados a la red, de forma que Microsoft decidió renovarla con
 Powershell.
@@ -25,7 +70,7 @@ si existen varias posibilidades un tabulador muestra la primera de ellas y poste
 - Pulsando las flechas del teclado se muestran los comandos ejecutados con anterioridad, pero si pulsamos
 F7 se muestra una ventana donde podemos seleccionar los comandos anteriores.VENTAJAS POWERSHELL
 
-## Ventajas de **PowerShell**
+## 1.1. Ventajas de **PowerShell**
 
 Windows PowerShell combina un entorno interactivo con un entorno de scripting que ofrece acceso a herramientas de línea de comandos y objetos COM (Componet Object Model), y permite aprovechar la eficacia de la biblioteca de clases de .NET Framework (FCL).
 
@@ -33,7 +78,7 @@ También mejora los scripts de Windows Script Host (WSH), que permiten utilizar 
 
 Aunque la interacción con Windows PowerShell se realiza mediante comandos de texto, Windows PowerShell está basado en objetos, no en texto. El resultado de un comando es un objeto.
 
-## Formato de los comandos
+## 1.2. Formato de los comandos
 
 Los comandos de `Powershell` se denominan cmdlets (commandlets).
 Estos comandos tienen una sintaxis particular que se compone de un verbo, un sustantivo y después las opciones y argumentos:
@@ -51,7 +96,7 @@ get-history 7           # Muestra solamente el comando número 7 de la lista
 get-history -id 7       # Muestra solamente el comando número 7 de la lista
 ```
 
-### El concepto VERBO–SUSTANTIVO
+### 1.2.1. El concepto VERBO–SUSTANTIVO
 
 Los **verbos** expresan acciones concretas en WPS.
 - `Get` : obtiene
@@ -94,7 +139,7 @@ Get-Command -name Clear-Host     # Muestra información de lo indicado a través
 
 
 
-## Ayudas en PowerShell
+## 1.3. Ayudas en PowerShell
 
 Es muy importante manejar el sistema de ayuda de Powershell. 
 
@@ -133,9 +178,9 @@ get-help Get-Date -online	#ayuda online
 get-help Write-Output -ShowWindow #Muestra la ayuda en una ventana
 ```
 
-# Comando básicos de `PowerShell`
+# 2. Algunos comandos básicos de `PowerShell`
 
-## `Get-Command` 
+## 2.1. `Get-Command` 
 Muestra información básica sobre los cmdlets. Se suele utilizar para obtener listas de cmdlets.
 
 Con `Get-Command` podemos obtener la lista de comandos, o por verbos, o por sustantivos
@@ -145,7 +190,7 @@ Get-Command -Noum Service #de un sustantivo, o sea los que tengan que ver con al
 Get-Command Clear-Host    #de un comando en concreto
 ```
 
-## `Get-Member`
+## 2.2. `Get-Member`
 
 Todo lo que devuelve un cmdlet es un objeto. Un objeto es una forma de almacenar información, en la que se asocia a cada elemento una serie de datos denominados propiedades y una serie de acciones denominadas métodos.
 
@@ -166,11 +211,11 @@ Get-Command | Where-Object{ $_.Name -like '*alias'} #Retorna
 ```
 
 
-## Alias. Concepto y comandos.
+## 2.3. Alias. Concepto y comandos.
 
 Un **Alias** asocia un nombre de comando con otro comando. Se usan para evitar frustrar al usuario al usar un nuevo Shell. Hay de unix7linux como de ms-dos/cmd.
 
-### `Get-Alias`
+### 2.3.1. `Get-Alias`
 
 Obtiene los alias o un alias en concreto:
 
@@ -189,7 +234,7 @@ Get-Alias -Name gp*, sp* -Exclude *ps
 Get-Alias -Definition Get-ChildItem   # muestra todos los alias que utilizan Get-ChildItem
 ```
 
-### `Set-Alias`
+### 2.3.2. `Set-Alias`
 
 Crea o modifica un alias
 
@@ -217,7 +262,7 @@ Set-Alias -Name np -Value C:\Windows\notepad.exe    #Creando un alias a un ejecu
  ``` 
 Más información sobre Alias en PowerShell: [PowerShell: List of Aliases](http://xahlee.info/powershell/powershell_aliases.html)
 
-### `Get-Date`
+## 2.4. `Get-Date`
 
 Para obtener la fecha. Ejemplos:
 
@@ -228,7 +273,7 @@ Get-Date -UFormat "%d/%m/%Y %H:%M:%S"	#02/05/2020 09:52:24
 Get-Date -UFormat "%A, %d de %B de /%Y %T %Z"	#sábado, 02 de mayo de /2020 09:55:29 +02
 ```
 
-# Comandos para la gestión de Archivos y Carpetas
+## 2.5. Comandos para la gestión de Archivos y Carpetas
 
 Para la gestión de archivos y carpeta con ***powershell***, además de los alias creados en el sistema, tenemos los siguientes comandos nativos:
 
@@ -274,7 +319,7 @@ Get-Content .\prueba.txt                # Muestra el contenido del fichero anter
 > 
 Pero **nosotros utilizaremos exclusivamente los comandos de powershell**
 
-# Tuberias y redirecciones
+# 3. Tuberias y redirecciones
 
 El mecanismo de tubería conocido en los sistemas Linux funciona de igual forma en Powershell, pero su uso es aun más intensivo, ya que la información que muestran los comandos, el formato de salida, etc, se controla usando este mecanismo.
 
@@ -298,8 +343,17 @@ ls c:\windows >> fichero.txt
 ```
 
 
-# Formateando y ordenando la salida
-### `Format-List`
+# 4. Formateando, ordenando y filtrando resultado
+
+PowerShell permite modelar los resultados de la ejecución de los CmdLets.
+
+Esto permite proveer al usuario de visión adaptada a las necesidades de cada momento, para que la interpretación de los valores obtenidos se más intuitiva y sencilla
+
+Al mismo tiempo, estos resulados los podemos ordenar y filtrar
+
+## 4.1. Formateando la salida de los CmdLets
+
+### 4.1.1. `Format-List`
 
 Forma en un listado 
 
@@ -324,7 +378,7 @@ Get-Process -name PowerShell | Format-List
 Get-Process | Format-List -Property id, name            # Muestra solo las propiedades concretas
 ```
 
-### `Format-Wide`
+### 4.1.2. `Format-Wide`
 
 Formatea en columnas, las que indiquemos o quepan
 
@@ -351,7 +405,7 @@ Format-Wide
 Get-ChildItem | Format-wide -column 3                   # muestra el listado en 3 columnas
 ```
 
-### `Format-Table`
+### 4.1.3. `Format-Table`
 
 Formatear en una especie de tabla
 
@@ -380,8 +434,9 @@ Format-Table
 Get-Process | Format-Table -property id, ProcessName
 Get-Process | format-Table -groupby ProcessName -property id, ProcessName # Además agrupa
 ```
+## 4.2. Ordenando los resultados de los CmdLets
 
-### `Sort-Object`
+### 4.2.1. `Sort-Object`
 
 Ordena el listado por una o varias propiedades. 
 
@@ -400,7 +455,9 @@ En este caso, vamos a utilizar el comando a traves de una *pipe* o ***tubería**
 ls | Get-Member -MemberType Property	# muestra las propiedades del comando.
 ```
 
-### `Where-Object`
+## 4.3. Filtrando los resultados de los CmdLets
+
+### 4.3.1. `Where-Object`
 
 Permite realizar un filtro mediante una condición concreta entre los resultados de un comando determinado. Siempre se utiliza después de una tubería
 
@@ -424,7 +481,7 @@ Get-ChildItem | Where-Object {$_.FullName -match '[a-z]+\.*txt$'}               
 Get-ChildItem | Where-Object {$_.Length -ge 1000 -and $_.LastAccessTime -gt (Get-Date '2020/03/30')}    # listar archivos que sean de mas de 1000 kb y que el último acceso sea posterior a una fecha
 ```
 
-### `Select-Object`
+### 4.3.2. `Select-Object`
 
 Seleccionar objetos que vienen de la tubería. 
 
@@ -442,7 +499,7 @@ Get-Process | Select-Object -Property ProcessName, Id, WS                   # Ob
 Get-Process Notepad  | Select-Object id, ProcessName, StartTime -First 3    # Seleccionar 3 propiedades pero solo los 3 primeros registros
 ```
 
-### `Where-Object`
+### 4.3.3. `Where-Object`
 
 Permite filtrar objetos de entre todos los resultado obtenidos tras las ejecución de un comando
 
@@ -531,15 +588,15 @@ Get-Module -ListAvailable | where {
 
 
 
-# CmdLets para la gestión de **servicios** y **procesos**
+# 5. CmdLets para la gestión de **servicios** y **procesos**
 
 Para un administrador de sistemas, uno de los elementos principales es la gestíon y control de los servicios de que dispone un sistema, los servicios que estan en marcha o parados así como los procesos que se estan ejecutado en un moemnto determinado 
 
 Veamos a continuación una serie de comandos enfocados a la gestión de *procesos* y *servicios*
 
-## Gestión de servicios
+## 5.1. Gestión de servicios
 
-### `Get-Service`
+### 5.1.1. `Get-Service`
 Obtiene el listado de servicios del equipo:
 
 ```powershell
@@ -565,7 +622,7 @@ Get-Service s* | Select-Object name, DependentServices
 Get-Service SstpSvc | Select-Object name, DependentServices | select -ExpandProperty dependentServices
 ```
 
-### `Start-Service`
+### 5.1.2. `Start-Service`
 
 Inicia un servicio
 
@@ -584,16 +641,16 @@ Get-Service | where {$_.DisplayName -like "*host*"} | Where-Object {$_.Status -l
 Get-Service s* | Select-Object name, RequiredServices, DependentServices
 ```
 
-## Gestión de procesos
+## 5.2. Gestión de procesos
 
-### `Get-Process`
+### 5.2.1. `Get-Process`
 
 - Listar procesos
 ```powershell
 Get-Process -name se*
 ```
 
-### `Start-Process`
+### 5.2.2. `Start-Process`
 
 Iniciar/arrancar un proceso
 
@@ -601,7 +658,7 @@ Iniciar/arrancar un proceso
 Start-Process notepad
 ```
 
-### `Stop-Process`
+### 5.2.3. `Stop-Process`
 
 Eliminar un proceso por el número de *id*
 
@@ -636,13 +693,13 @@ ps -name s* | select id, ProcessName, StartInfo -first 5
 ```
 
 
-### `Format-List`
+### 5.2.4. `Format-List`
 Mostrando procesos en forma de lista
 ```powershell
 Get-Process s* | Select-Object id, ProcessName | format-list
 ```
 
-### `Sort-Object`
+### 5.2.5. `Sort-Object`
 Seleccionando solo *"ProcessName"* , valores únicos y ordenarlo pero por el *id*
 ```powershell
 Get-Process s* | Select-Object ProcessName -uniq | Sort-Object -Property id
@@ -654,7 +711,7 @@ Get-Process s* | Select-Object id, ProcessName, CPU | Sort-Object -Property cpu 
 ps -name s* | sort cpu -desc | select id, ProcessName, cpu -first 5 #solo 5
 ```
 
-## Ejemplos de filtros (`Where-Object`) con procesos y servicios: 
+## 5.3. Ejemplos de filtros (`Where-Object`) con procesos y servicios: 
 
 **Ejemplos** con `Where-Object`
 
@@ -728,9 +785,11 @@ Get-ChildItem C:\temp\*.md | ForEach-Object { renove-item $_.FullName}
 Get-ChildItem *.txt | ForEach-Object {$_.CopyTo($pwd.Path+"\"+$_.BaseName+".texto")}
 ```
 
-# **WMI**: *Windows Management Instrumentation*.
+# 6. Otros comandos
 
-## Objetos **WMI**
+## 6.1. **WMI**: *Windows Management Instrumentation*.
+
+### 6.1.1. Objetos **WMI**
 
 **WMI**: *Windows Management Instrumentation*. Esta previamente instalado y es una herramienta que sirve para gestionar los elelemtos Hardware de nuestro sistema a través de PowerShell
 
@@ -742,7 +801,7 @@ Get-WmiObject -class win32_BIOS         # infomración de la BIOS
 Get-WmiObject -list                     # lista todos los elementos posibles
 ```
 
-## WMIC
+### 6.1.2. WMIC
 
 A diferencia de `WMI` lo hace todo con el comando `get-WmiObject` con `WMIC` tenemos especie de extensión que se obtiene con el comando `wmic`. Una de las diferencias que con `wmic` debemos especificar las salidas.
 - wmic opciones_globales alias formatoDeSalida
@@ -762,7 +821,7 @@ wmic /output:stdout recoveros get /all /format:list    # información sobre los 
 wmic process call create "Notepad.exe" # ejecuta el notepad
 ```
 
-# PowerShell para consultar el **registro de windows**
+## 6.2. PowerShell para consultar el **registro de windows**
 
 Desde `PowerShell` podemos acceder al registro de Windows únicamente para ***consulta***.
 

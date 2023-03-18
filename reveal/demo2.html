@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Demo con Reveal.js</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css" id="theme">
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Markdown support
+
+                        Write content using inline or external Markdown.
+                        Instructions and more info available in the [docs](https://revealjs.com/markdown/).
+
+                        ```html []
+                        <section data-markdown>
+                          ## Markdown support
+
+                          Write content using inline or external Markdown.
+                          Instructions and more info available in the [docs](https://revealjs.com/markdown/).
+                        </section>
+                        ```
+                    </script>
+                </section>
+
+                <section data-markdown>
+                    <script type="text/template">
+                        ## Another slide
+
+                        Java sample code
+
+                        ```java[|9]
+                        public class MyClass
+                        {
+                            public MyClass()
+                            {
+                            }
+                            
+                            public void aMethod()
+                            {
+                                System.out.println("Hello world");
+                            }
+                        ```
+                    </script>
+                </section>
+            </div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+
+			// Also available as an ES module, see:
+			// https://revealjs.com/initialization/
+			Reveal.initialize({
+				controls: false,
+				progress: false,
+				center: true,
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight ]
+			});
+
+		</script>
+
+	</body>
+</html>

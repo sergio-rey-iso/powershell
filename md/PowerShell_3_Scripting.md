@@ -4,13 +4,42 @@ description:
 permalink: /PowerShell_3_Scripting/
 ---
 
-# Scripts powershell
+- [1. Scripts powershell](#1-scripts-powershell)
+  - [1.1. PowerShell ISE](#11-powershell-ise)
+  - [1.2. Notas Generales](#12-notas-generales)
+- [2. Estructuras de control (condiciones y bucles) en `PowerShell`](#2-estructuras-de-control-condiciones-y-bucles-en-powershell)
+  - [2.1. Condiciones con estructuras **`IF`**](#21-condiciones-con-estructuras-if)
+  - [2.2. Condiciones con  **`switch`**](#22-condiciones-con--switch)
+  - [2.3. Bucles con estructura **`for`**](#23-bucles-con-estructura-for)
+  - [2.4. Bucles con estructura **`while`**](#24-bucles-con-estructura-while)
+  - [2.5. Bucles con estructura **`foreach`**](#25-bucles-con-estructura-foreach)
+- [3. Parámetros](#3-parámetros)
+- [4. Funciones](#4-funciones)
+- [5. Variables de entorno](#5-variables-de-entorno)
+- [6. Lectura de ficheros](#6-lectura-de-ficheros)
 
-Visto en `01_Ejer1.ps1`
 
+# 1. Scripts powershell
 
-Tienen que tener extension **.ps1** y se ejecuta como **.\script.ps1**
-## Notas Generales
+Tal y como vimos en GNU/Linux, en PowerShell también podemos hacer uso de los *scripts* para automatizar tareas administrativas.
+
+En PowerShell, los scripts deben ser ficheros con extension **.ps1**. Esto indicará al sistema que se trata de un *script* desarrollado mediante PoserShell.
+
+Su ejecución se realizará haciendo doble click sobre el fichero con esta extension **.ps1** o escribiendo en la consola de PowerShell el nombre de dicho fichero como por ejemplo **.\script.ps1**
+
+Mas información en ***Microsoft Learn*** [¿Qué es PowerShell?](https://learn.microsoft.com/es-es/powershell/scripting/overview?view=powershell-7.3)
+
+## 1.1. PowerShell ISE
+
+Windows PowerShell Integrated Scripting Environment (ISE) es una aplicación host de Windows PowerShell. En el ISE, puede ejecutar comandos y escribir, probar y depurar scripts en una única interfaz gráfica de usuario basada en Windows. El ISE proporciona edición de varias líneas, finalización con tabulación, color de sintaxis, ejecución selectiva, ayuda contextual y compatibilidad con idiomas de derecha a izquierda.
+
+<div align="center">
+    <img src="../img/03_PowerShell_ISE.jpeg" alt="Redirecciones y tuberías" width="33%" />
+</div>
+
+Mas información: 
+
+## 1.2. Notas Generales
 - **Comentarios**. Se utiliza *#* y *<# #>* para bloques
 - Las **variables** se ponen siempre con **$** delante
     - Si quiero que una variable tengo un tipo concreto, hay que ponerlo delante con **[ ]**. Solo se puede utilizar con ese tipo.
@@ -18,34 +47,48 @@ Tienen que tener extension **.ps1** y se ejecuta como **.\script.ps1**
 - **Write-Output** para la escritura y el **Read-Host** para la lectura de datos
 - los **arrays** se definen como elementos separado por comas. No se si hay otra forma.
 
+**Variables en `PowerSHell`.**
 
-## Variables en `PowerSHell`
+Sirven para almacenar cualquier dato u objeto. 
+
+La definición de una variable se realiza mediante el símbolo (**$**) Dólar delante del nombre de la variable.
+
 ```powershell
 Write-Output "hola"	# lo mismo que echo
 $varInt=1 # Variable de tipo entero
 $varDecimal=1.95 #para decimales hay que utilizar un 'punto' .
-[int]$numeroEntoro=55
+```
+
+Se trata de objeto que pueden almacenar datos, y pueden cambiar de tipo en cualquier momento.
+
+Pero si indicamos el tipo de dato que va a almacenar, ya no podemos utilizar esta variable para otro tipo de datos diferente:
+
+```powershell
+[int]$numeroEntoro=55   # define una variabla para datos enteros; números sin decimales.
 $numeroEntero="hola"	# esto da un error porque esta variable se ha especificado que es entera
-[boolean]$vedad=$true
-[decimal]$varDecimal=1.234	#para número decimales
-[byte]::minValue           # nos indica el valor mínimo de este tipo
+
+[boolean]$vedad=$true       # para booleanos
+[decimal]$varDecimal=1.234	# para número decimales
+[byte]::minValue            # nos indica el valor mínimo de este tipo
 [int16]::minValue           # nos indica el valor mínimo de este tipo
-[int]::minValue           # nos indica el valor mínimo de este tipo
+[int]::minValue             # nos indica el valor mínimo de este tipo
 [int32]::maxvalue           # nos indica el valor máximo de este tipo
-[char]$variableLetra="a"	#solo admite una letra
+[char]$variableLetra="a"	# solo admite una letra
 [string]$varCadena="Hola Amigo como estas"	#para una cadena
 
-$numero=4,5	#Tiene una COMA
-$numero.GetType()	#Retorna que es de tipo objeto. un array
-$numero=4.5	#Tiene una PUNTO
-$numero.GetType()	#Retorna que es de tipo double, un número real
+$numero=4,5	        # Tiene una COMA, que se utiliza para almacenar arrays
+$numero.GetType()	# Retorna que es de tipo objeto. un array
+$numero=4.5	        # Tiene una PUNTO, que se utiliza para valores numéricos
+$numero.GetType()	# Retorna que es de tipo double, un número real
 
 Write-Output $numeroEntero.GetType().name #Muestra el tipo de la variable
 Write-Output "El rango de valores va desde $([decimal]::MinValue) hasta el $([decimal]::MaxValue) "
 ```
 
-## Estructuras de control (condiciones y bucles) en `PowerShell`
-### Ejemplo estructura **`IF`**
+# 2. Estructuras de control (condiciones y bucles) en `PowerShell`
+
+## 2.1. Condiciones con estructuras **`IF`**
+
 - Ojo, no tiene **then** y el **else** y **elseif** si **no** lo pones en una línea sola no funciona
 
 ```powershell
@@ -83,7 +126,7 @@ if ($num -gt 100) {
 ```
 
 
-### Condiciones con  **`switch`**
+## 2.2. Condiciones con  **`switch`**
 Ojo que va todo metido entre llaves: Tanto todas las accionesa a realizar, como cada una de las acciones. 
 ```powershell
 # ****** Ejemplo con switch *************
@@ -108,7 +151,7 @@ switch ($opcion) {
 }
 ```
 
-### Estructura con un **`for`**
+## 2.3. Bucles con estructura **`for`**
 
 ```powershell
 $num = Read-Host "Introduce un número entre 0 y 10"
@@ -118,7 +161,7 @@ for ($i=0; $i -le 10; $i++){
 }
 ```
 
-### Estructura con un **`while`**
+## 2.4. Bucles con estructura **`while`**
 De nuevo la misma tabla de mutiplicar , pero con el while. 
 ```powershell
 $num = Read-Host "Introduce un número entre 0 y 10"
@@ -131,7 +174,7 @@ while ( $i -le 10){
 ```
 También esta la estructura `do..until` 
 
-## Bucle con  **`foreach`**
+## 2.5. Bucles con estructura **`foreach`**
 Tenemos un **array** que se define con elementos separados por comas
 ```powershell
 $array = 1, "dos", 3, "cuatro", 5
@@ -175,6 +218,8 @@ foreach ( $item in $lista)
 ```
 
 - En el siguiente ejemplo podemos ver que se muestra el mismo resultado si hacemos una tubería directamente al **ForEach** (***%***)
+
+
 ```powershell
 $lista = Get-ChildItem c:\windows | %{$_.Name + "--->" + $_.Length}
 foreach ( $item in $lista)
@@ -188,15 +233,16 @@ Get-ChildItem c:\windows | %{$_.Name + "--->" + $_.Length}
 ```
 
 - Podemos utilizar el **ForEach** para sumar o recorrer automáticamente la lista
+
 ```powershell
 $suma= 0
 Get-ChildItem c:\windows | ForEach{$suma += $_.Length}
 Write-Output "Tamaño de los elementos: $suma"
 ```
 
-y otra vesión de lo mismo con más datos
-```powershell
+y otra versión de lo mismo con más datos
 
+```powershell
 $suma= 0
 Get-ChildItem c:\windows | ForEach{
     write-output( $_.name + "  --  " + $_.Length)
@@ -205,11 +251,11 @@ Get-ChildItem c:\windows | ForEach{
 Write-Output "Tamaño de los elementos: $suma"
 ```
 
-# Parámetros
+# 3. Parámetros
 
 Visto en `02_parametros.ps1`
 
-Para la definición de parámetros en un Script, hay que definir un bloque **Param** y ahí se espcifican los parámetros entre paréntesis separados por comas, con o sin tipo
+Para la definición de parámetros en un Script, hay que definir un bloque **Param** y ahí se especifican los parámetros entre paréntesis separados por comas, con o sin tipo
 ```powershell
 Param(
     $Primero,
@@ -234,7 +280,7 @@ Para llamar a estos scripts
 .\script.ps1 -seguundo pepe -cuarto $true
 ```
 
-# Funciones
+# 4. Funciones
 
 Visto en `03_funciones.ps1`
 
@@ -292,7 +338,7 @@ switch ($opcion) {
 }
 ```
 
-# Variables de entorno
+# 5. Variables de entorno
 Para ver todas las variables de entorno
 ```powershell
 Get-ChildItem env:
@@ -307,15 +353,18 @@ Para reasignar una variable de entorno. Aunque en este caso, el sistema restaura
 ```powershell
 $env:Path+=Get-Location
 ```
-## Herramienta para parametrizar uso (path) de perfiles para ejecución de 
-- En el directorio c:\users\Sergio\Documents\WindowsPowerShell
+> **Nota**: Podemos parametrizar la ejecución de scripts o predefinir variables, para cada usuario
+  - En el directorio c:\users\Sergio\Documents\WindowsPowerShell
     - **profile.ps1** --> indica perfiles de ejecución de la shell
-    - **Microsoft.powershell_profile.ps1** --> lo que se pone aqui afecta a los que se ejecuta powershell en mi usuario 
+    - **Microsoft.powershell_profile.ps1** --> lo que se pone aquí afecta a los que se ejecuta powershell en mi usuario 
 
 
-# Lectura de ficheros 
+# 6. Lectura de ficheros 
 
-Forma fácil de leer el contenido de un archivo cargando el archivo en una variable.
+Uno de los aspectos fundamentales es la ejecución de script en función de información que llega en ficheros de textos
+
+La forma fácil de leer el contenido de un archivo cargando el archivo en una variable.
+
 ```powershell
 $mifich = cat nombres.txt
 

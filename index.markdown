@@ -6,14 +6,14 @@
 title: Apuntes de PowerShell
 ---
 
-# PowerShell
+# Apuntes de **PowerShell**
 
 Apuntes de **PowerShell**  para el módulo de ISO del CFGS de ASIX.
 
 Apartados:
 
 - [PowerShell Básico](./PowerShell_1_Basico/)
-- [PowerShell para administración de Active Directoy](./PowerShell_2_ActiveDirectory/)
+- [PowerShell para administración de Active Directory](./PowerShell_2_ActiveDirectory/)
 - [Script con PowerShell](./PowerShell_3_Scripting/)
 
 

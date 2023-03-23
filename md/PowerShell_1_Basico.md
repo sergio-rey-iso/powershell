@@ -43,8 +43,6 @@ permalink: /PowerShell_1_Basico/
     - [5.2.1. `Get-Process`](#521-get-process)
     - [5.2.2. `Start-Process`](#522-start-process)
     - [5.2.3. `Stop-Process`](#523-stop-process)
-    - [5.2.4. `Format-List`](#524-format-list)
-    - [5.2.5. `Sort-Object`](#525-sort-object)
   - [5.3. Ejemplos de filtros (`Where-Object`) con procesos y servicios:](#53-ejemplos-de-filtros-where-object-con-procesos-y-servicios)
 - [6. Otros comandos](#6-otros-comandos)
   - [6.1. **WMI**: *Windows Management Instrumentation*.](#61-wmi-windows-management-instrumentation)
@@ -789,13 +787,13 @@ ps -name s* | select id, ProcessName, StartInfo -first 5
 ```
 
 
-### 5.2.4. `Format-List`
+- Con `Format-List`
 Mostrando procesos en forma de lista
 ```powershell
 Get-Process s* | Select-Object id, ProcessName | format-list
 ```
 
-### 5.2.5. `Sort-Object`
+- Con `Sort-Object`
 Seleccionando solo *"ProcessName"* , valores únicos y ordenarlo pero por el *id*
 ```powershell
 Get-Process s* | Select-Object ProcessName -uniq | Sort-Object -Property id

@@ -24,22 +24,23 @@ permalink: /PowerShell_2_ActiveDirectory/
     - [2.3.1. `New-ADOrganizationalUnit`](#231-new-adorganizationalunit)
     - [2.3.2. `get-ADOrganizationalUnit`](#232-get-adorganizationalunit)
     - [2.3.3. `Remove-AdOrganizationaUnit`](#233-remove-adorganizationaunit)
-  - [2.4. Comando para la gestión de equipos](#24-comando-para-la-gestión-de-equipos)
-    - [2.4.1. `New-ADComputer`](#241-new-adcomputer)
-    - [2.4.2. `Set-ADComputer`](#242-set-adcomputer)
-    - [2.4.3. `Get-ADComputer`](#243-get-adcomputer)
-    - [2.4.4. `Remove-ADComputer`](#244-remove-adcomputer)
-  - [2.5. Otros comandos de Active Directory](#25-otros-comandos-de-active-directory)
-    - [2.5.1. `get-ADObject`](#251-get-adobject)
-    - [2.5.2. `Move-ADObject`](#252-move-adobject)
-    - [2.5.3. `Get-ADForest`](#253-get-adforest)
-    - [2.5.4. `Get-ADDomainCotroller`](#254-get-addomaincotroller)
-    - [2.5.5. `search-ADAccount`](#255-search-adaccount)
-    - [2.5.6. `Set-ADAccountExpiriation` y `Clear-ADAccountExpiration`](#256-set-adaccountexpiriation-y-clear-adaccountexpiration)
-    - [2.5.7. `Unlock-ADAccount`](#257-unlock-adaccount)
-    - [2.5.8. `Set-ADAccountPassword`](#258-set-adaccountpassword)
-  - [2.6. Tabla resumen de comandos y sufijos](#26-tabla-resumen-de-comandos-y-sufijos)
-  - [2.7. Filtros: Ejemplos de uso con comandos de Active Directory](#27-filtros-ejemplos-de-uso-con-comandos-de-active-directory)
+  - [2.4. Modificar usuarios](#24-modificar-usuarios)
+  - [2.5. Comando para la gestión de equipos](#25-comando-para-la-gestión-de-equipos)
+    - [2.5.1. `New-ADComputer`](#251-new-adcomputer)
+    - [2.5.2. `Set-ADComputer`](#252-set-adcomputer)
+    - [2.5.3. `Get-ADComputer`](#253-get-adcomputer)
+    - [2.5.4. `Remove-ADComputer`](#254-remove-adcomputer)
+  - [2.6. Otros comandos de Active Directory](#26-otros-comandos-de-active-directory)
+    - [2.6.1. `get-ADObject`](#261-get-adobject)
+    - [2.6.2. `Move-ADObject`](#262-move-adobject)
+    - [2.6.3. `Get-ADForest`](#263-get-adforest)
+    - [2.6.4. `Get-ADDomainCotroller`](#264-get-addomaincotroller)
+    - [2.6.5. `search-ADAccount`](#265-search-adaccount)
+    - [2.6.6. `Set-ADAccountExpiriation` y `Clear-ADAccountExpiration`](#266-set-adaccountexpiriation-y-clear-adaccountexpiration)
+    - [2.6.7. `Unlock-ADAccount`](#267-unlock-adaccount)
+    - [2.6.8. `Set-ADAccountPassword`](#268-set-adaccountpassword)
+  - [2.7. Tabla resumen de comandos y sufijos](#27-tabla-resumen-de-comandos-y-sufijos)
+  - [2.8. Filtros: Ejemplos de uso con comandos de Active Directory](#28-filtros-ejemplos-de-uso-con-comandos-de-active-directory)
 - [3. Active Directory - Permisos](#3-active-directory---permisos)
   - [3.1. Gestión de permisos SMB](#31-gestión-de-permisos-smb)
     - [3.1.1. `New-SmbShare`](#311-new-smbshare)
@@ -54,7 +55,7 @@ permalink: /PowerShell_2_ActiveDirectory/
 
 # 1. Módulos en PowerShell
 
-Son paquetes que contienen comandos especificos para la administración de una faceta del sistema.
+Son paquetes que contienen comandos específicos para la administración de una faceta del sistema.
 
 - `Get-Module` para listar los módulos que instalados en el sistema
 
@@ -66,7 +67,7 @@ Get-Module -ListAvailable # Lista los módulos cargados o disponibles pero no in
 [Referencia de Microsoft PowerShell: Get modules installed on a computer](https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/get-module?view=powershell-7.1#example-9--get-modules-installed-on-a-computer)
 
 
-Si queremos instalar un módulo nuevo porque necesitamos gestionar un caractarística o rol en concreto desde PowerShell, entonces debemos instalar el módulo mendiante el comando `Import-Module`
+Si queremos instalar un módulo nuevo porque necesitamos gestionar un caractarística o rol en concreto desde PowerShell, entonces debemos instalar el módulo mediante el comando `Import-Module`
 
 - `Import-module` para instalar un nuevo módulo
 
@@ -90,11 +91,48 @@ Con los siguientes usuarios se puede realizar la gestión de todos los elementos
 
 ### 2.1.1. `New-ADUser`
 
-Para crear nuevo usuario
+Para crear un usuario utilizamos el cmdlet `new-aduser`. 
 
-Parámetros habituales:
+Ejemplo:
+```powershell
+New-aduser -name usu1
+```
 
-    - `-UserPrincipalName` : Establace el nombre del Login
+Pero de esta manera no tendremos un usuario funcional ya que son necesarios más datos como el *fullname*, *samaccountname*, *contraseña*, etc.
+
+El más necesario es la contraseña, debe ser del tipo *securestring*. En el siguiente ejemplo la solicitaremos al usuario para poderla asignar a posteriori al cmdlet, a través de la variable *$mipassword*.
+```powershell
+$mipassword=Read-Host “Introduce la contraseña” -assecurestring
+```
+
+Creamos otro usuario con contraseña:
+
+```powershell
+New-aduser -name “usu2” -accountpassword $mipassword
+```
+
+También podemos poner una contraseña fija, una ubicación y habilitar la cuenta:
+```powershell
+New-aduser -name “usu2” -accountpassword $(convertto-securestring “Abc123!” –asplaintext -force) -path “cn=users, DC=domiprofe,DC=curso” -Enabled $true –Passthru
+```
+
+> Con el parámetro `–passthru` obtenemos detalles durante la creación.
+
+Si cambiamos el parámetro en el ejemplo anterior del `-accountpassword`, y ponemos la opción de solicitar password, durante la creación se solicitará por teclado al usuario.
+```powershell 
+-accountpassword $(read-Host “Contraseña” -asSecurestring)
+```
+
+y el cmdlet copleto querdaría
+```powershell
+New-aduser -name “usu2” -accountpassword $(read-Host “Contraseña” -asSecurestring) -path “cn=users, DC=domiprofe,DC=curso” -Enabled $true –Passthru
+```
+
+> Cuidado en la administración de sistemas con incluir este tipo de diálogos interactivos, ya que el objetivo último es automatizar y no tener que estar interactuando con un script que genera cientos de usuarios a partir de un listado.
+
+Así pues los parámetros habituales que nos encontramos en `New-AdUser` son:
+
+    - `-UserPrincipalName` : Establce el nombre del Login
     - `-SamAccountName`: Para nombre anterior a Windows 2000
     - `-Name`: Nombre de pila
     - `-Surname`: Apellido/s
@@ -110,7 +148,7 @@ Parámetros habituales:
 ***Ejemplos*** de uso: 
 
 ```powershell
-New-ADUser -UserPrincipalName "adominguez00" -SamAccountName "adominguez00" -Name "Alberto00" -Surname "Dominguez" -DisplayName "Alberto Dominguez" -Path "OU=ouDesarrolloMulti00,OU=ouInformatica00,OU=ouEmpresa00,DC=DOMSERGIO,DC=LAN" -Department "Desarrollo Multiplataforma" -AccountPassword (ConvertTo-SecureString -string "AaAaAa!1" -AsPlainText -Force) -Enabled $true -ChangePasswordAtLogon:$false -PassThru
+New-ADUser -UserPrincipalName "sbalmes" -SamAccountName "sbalmes" -Name "Santi" -Surname "Balmes" -DisplayName "Santi Balmes" -Path "OU=ouCantante,OU=ouLoveOfLesbian,OU=ouGrupoMusicales,DC=DOMSERGIO,DC=LAN" -Department "Grupos Españoles" -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd -AsPlainText -Force) -Enabled $true -ChangePasswordAtLogon:$false -PassThru
 
 New-ADUser -DisplayName "alumno1" -Name "alumno1" -UserPrincipalName "alumno1" -Enabled:$true -Path "OU=usuarios,OU=Organizacion,DC=dominio,DC=lan" -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd" -AsPlainText -Force) -ChangePasswordAtLogon:$True
 ```
@@ -119,11 +157,17 @@ New-ADUser -DisplayName "alumno1" -Name "alumno1" -UserPrincipalName "alumno1" -
 
 ### 2.1.2. `Remove-ADuser` 
 
-Para eliminar usuario:
+Normalmente los usuarios en Active Directory no se suelen borrar ya que la práctica recomendada es desactivarlos.
 
-Parámetros: 
+Pero si decidimos hacerlo, hay que pasar unos valores determinados para identificar al usuario, como el Name, SID o SamAccountName al parámetro –identity, y ejecutarlo de la siguiente manera.
 
-    - `-identity` : Para identificar el usuario a modificar
+```powershell
+Remove-aduser -identity nombreusuario
+``` 
+
+Siempre se pide confirmación a no ser que utilicemos el parámetro `-Confirm:$false` De la misma manera podemos leer listas de usuarios de un archivo, seleccionar usuarios con get-aduser y pasarlos a este cmdlet. 
+
+Ejemplo
 
 ```powershell
 Remove-ADuser -identity alumno1 -confirm:$False #para no pedir confirmación
@@ -200,21 +244,33 @@ get-adUser -filter'name -like "j*" ' -searchbase "ou=unidad1,dc=dominio,dc=lan" 
 
 ### 2.1.6. `Enable-ADAccount` y `Disable-ADAccount`
 
-Habilitar/Deshabilitar un usuario
+Por lo general cuando un usuario deja la empresa su cuenta se desactiva, podemos tener casos en los que se sigan políticas más estrictas en cuanto a seguridad, en las que cada vez que un usuario esté de vacaciones, se realice un proceso de desactivación y posterior activación de la cuenta
+
+Para activar un usuario usaremos el cmdlet `Enable-ADAccount` y para desactivar el `Disable-ADAccount` Para ejecutar estos cmdlets se necesita identificar al usuario a través de alguna de las siguientes propiedades:
+- **Distinguished Name (DN) **o n**ombre LDAP**. Por ejemplo `CN=nombredeusuario,OU=miou,DC=domiprofe,DC=curso`
+- **ObjectGUID**. Por ejemplo `954199er-0df4-6571-b437-5rt42001b11d`
+- **Security Identifier** (SID) Ej.: **S-1-5-21-653638456-1125679544-1145158610-1114**
+- **SAMAccountName**. Por ejemplo `nombredeusuario`
+
+Podemos conseguir esos valores con `Get-ADUser` y usarlos en el cmdlet, como vemos a continuación:
 
 ```powershell
-Enable-ADAccount -identity usuario1 -passthru
-Disable-ADAccount -identity usuario1
+Disable-ADAccount-identity usu1 –passthru   # Desactivamos el usuario usu1.
+Enable-ADAccount  -identity usu1 –passthru    # Activamos el usuario usu1.
 ```
-Con **-passthru** se fuerza la salida de un resultado por la ejecución del comando.
+> Con `-passthru` se fuerza la salida de un resultado por la ejecución del comando.
 
-***Ejemplos*** de uso: Dado un fichero con un listado de usuarios, habilitarlos / deshabilitarlos
+***Ejemplo*** de uso: si queremos desactivar todos los usuarios de una unidad organizativa podemos hacerlo con el siguiente comando:
 
 ```powershell
-# Habilitar
-cat usuarios.txt | ?{ Enable-ADAccount -identity $_}
-# Deshabilitar (sin alias)
-Get-Content usuarios.txt | Where-Object { Disable-ADAccount -identity $_}
+get-aduser -searchbase "OU=miou,DC=domiprofe,DC=curso" -filter * | disable-adaccount
+```
+
+***Ejemplo*** de uso: Dado un fichero con un listado de usuarios, habilitarlos / deshabilitarlos
+
+```powershell
+Cat usuarios.txt | ?{ Enable-ADAccount -identity $_}                        # Habilitar
+Get-Content usuarios.txt | Where-Object { Disable-ADAccount -identity $_}   # Deshabilitar (sin alias)
 ```
 
 ## 2.2. Comandos para la gestión de **grupos** de usuarios
@@ -222,10 +278,21 @@ Get-Content usuarios.txt | Where-Object { Disable-ADAccount -identity $_}
 
 ### 2.2.1. `New-ADGroup`: 
 
-Creación de grupo
+Para Crear un grupo usamos el cmdLet `New-ADGroup`, por ejemplo:
 
 ```powershell 
 New-ADGroup -Name "g_alumnos" -SamAccountName "gAlumnos" -GroupCategory Security -GroupScope Global -DisplayName "grupo de alumnos" -Path "OU=grupo,OU=ouAlumnos,DC=dominio,DC=lan" -Description "grupo de alumnos"
+```
+
+En el siguiente ejemplo creamos el grupo *migrupo* de tipo seguridad y de ámbito global en el contenedor users del dominio *domiprofe.curso*.
+```powershell
+New-adgroup –name “migrupo” -groupcategory security –groupscope global -path “cn=users, DC=domiprofe,DC=curso”
+```
+
+Creamos otro grupo de seguridad global llamado *migrupo2* en la unidad organizativa *otraou* con `displayname` y descripción.
+
+```powershell
+New-AdGroup -Name “migrupo2” -GroupCategory Security -GroupScope Global -displayname ‘Mi Segundo grupo’ -Path “OU=otraou, DC=domiprofe, DC=curso” -Description “Todos los grupos”
 ```
 
 ### 2.2.2. `Remove-ADGroup`: 
@@ -233,6 +300,7 @@ New-ADGroup -Name "g_alumnos" -SamAccountName "gAlumnos" -GroupCategory Security
 Elimina grupo de usuarios
 
 ```powershell
+Remove-ADGroup -identity migrupo  # Borramos el grupo anteriormente creado.
 Remove-ADGroup -identity gAlumnos
 ```
 
@@ -249,6 +317,7 @@ Add-ADGRoupMember -identity grupo -members usuario1
 eliminar usuario de grupo
 
 ```powershell
+Remove-ADGroupMember –Identity migrupo -Members usu1  # Eliminamos el usu1 del grupo indicado.
 Remove-ADGroupMember -identity grupo -members usuario1
 ```
 
@@ -278,6 +347,7 @@ Crear una UNIDAD ORGANIZATIVA
 
 ```powershell
 New-ADOrganizationalUnit -DisplayName "ouAlumnos" -Name "ouAlumnos" -path "DC=doinio,DC=lan"
+New-ADOrganizationalUnit -Name "miunidaduo" –path “dc=domiprofe,dc=curso”
 ```
 
 ***Ejemplos*** de uso: Deshabilitando todas las cuenta de una unidad organizativa en concreto
@@ -293,7 +363,9 @@ El **_-filter *_** es necesario por que tenemos que tener filtros si o si, enton
 para obtener datos de la unidad organizativa
 
 ```powershell
-get-ADOrganizationalUnit -path "ou=batoi,DC=doinisox,DC=lan"
+get-ADOrganizationalUnit -path "ou=ouISO,ou=ouAsix,ou=ouCFGS,DC=DOMSimarro,DC=lan"
+Get-ADOrganizationalUnit "OU=miunidaduo, dc=domiprofe,dc=curso"
+Get-ADOrganizationalUnit -Filter 'Name -like "m*"'
 ```
 
 ### 2.3.3. `Remove-AdOrganizationaUnit`
@@ -319,10 +391,82 @@ Remove-AdOrganizationaUnit -identity "ou=organization,dc=dominio,dc=curso"
 Remove-AdOrganizationaUnit -identity "ou=organization,dc=dominio,dc=curso" -recursive # para borrar todo lo que tenga dentro
 ```
 
+## 2.4. Modificar usuarios
 
-## 2.4. Comando para la gestión de equipos
+Para modificar las propiedades de un usuario, se usa el cmdlet set-aduser. Lo primero que tenemos que hacer para modificar una propiedad de un usuario o usuarios es conocer qué tipo de dato acepta cada propiedad para saber qué le podemos asignar.
 
-### 2.4.1. `New-ADComputer`
+Para ello podemos asignar una búsqueda de usuarios a una variable, por ejemplo:
+
+```powershell
+$misusuarios=get-aduser -filter “Name -like ‘u*’” -property # Guardamos en una variable todos los usuarios que empiezan por u.
+$misusuarios                                                # Mostramos todas las propiedades de estos usuarios.
+$misusuarios.name                                           # Mostramos solo la propiedad name.
+```
+
+En línea de comandos es mejor manipular un solo usuario, para varios usuarios es mejor un script.
+
+```powershell
+$miusu=get-aduser -filter “name -eq ‘usu3’” -property # Asignamos el objeto usuario usu3 a la variable $miusu.
+```
+
+Una vez hecho esto, podemos escribir:
+
+```powershell
+$miusu
+# ó
+$miusu.created 
+```
+Vemos todas las propiedades o solo una. Se ven sin necesidad de poner `Write-Output`
+
+Añadiendo un gettype al final nos indicará de qué tipo de dato se trata.
+
+```powershell
+$miusu.description.gettype() 
+```
+
+Cuidado, porque da error si la propiedad no tiene valor.
+
+Hay que tener en cuenta que es una variable que contiene el objeto. Si no ha recibido información de una de ellas porque no tiene datos, no puede darla.
+
+En este caso, si la descripción existía, nos indica que es un string. Podemos modificarla de la siguiente manera, usando parámetros de `set-aduser`:
+```powershell
+Set-aduser -identity $miusu -description “nueva descripción”
+```
+
+O también podríamos hacerlo de una manera menos directa usando la variable:
+
+```powershell
+$miusu.description = “nueva descripción” 
+```
+Si optamos por esto último. No olvidar pasarlo al AD, de la siguiente forma: `Set-aduser -instance $miusu`
+
+De la misma manera también podemos actualizar diversas propiedades a la vez, pasando directamente valores o pasando variables en las que previamente las hayamos
+almacenado:
+
+```powershell
+set-aduser -identity $miusu -department “Informatica” -city “Elche” -country “España”
+```
+
+Modificamos las propiedades indicadas al usuario contenido en $miusu
+
+```powershell
+set-aduser -identity "us4" -department “Informatica” -city “Elche” -country “ES”
+```
+
+Modificamos las propiedades indicadas al usuario concreto us4.
+
+Otro ejemplo, si pusiéramos:
+
+```powershell
+set-aduser -identity $misusuarios -department “Informatica” -city “Elche” -country “ES”
+```
+
+Se aplicarían los cambios en estas propiedades, a todos los usuarios contenidos en la variable que anteriormente hemos usado.
+
+
+## 2.5. Comando para la gestión de equipos
+
+### 2.5.1. `New-ADComputer`
 Para crear con anterioridad un equipo y que se ubique en un lugar especifico
 
 ***Ejemplos*** de uso: 
@@ -332,14 +476,14 @@ New-ADComputer -name equipo1 -path "ou=organizacion,dc=dominio,dc=curso" -PassTh
 ```
 > **-PassThru** para que muestren detalle de la salida.
 
-### 2.4.2. `Set-ADComputer`
+### 2.5.2. `Set-ADComputer`
 Para modificar un objeto de tipo Computer
 
 ```powershell
 Set-ADComputer -identity equipo1 -description "PC del usuario 1"
 ```
 
-### 2.4.3. `Get-ADComputer`
+### 2.5.3. `Get-ADComputer`
 Para seleccionar un computador.
 
 ***Ejemplos*** de uso: Para habilitar / deshabilitar: Obtenemos el equipo y lo obtenido se lo pasamos a la order de habilitar o deshabilitar
@@ -348,16 +492,16 @@ get-ADComputer -filter * -searchbase "ou=uniddad,dc=dominio,dc=curso" | disable-
 get-ADComputer -filter * -searchbase "ou=uniddad,dc=dominio,dc=curso" | enable-ADAccount
 ```
 
-### 2.4.4. `Remove-ADComputer`
+### 2.5.4. `Remove-ADComputer`
 Borrar equipo
 
 ```powershell
 remove-ADComputer -identity equipo1
 ```
 
-## 2.5. Otros comandos de Active Directory
+## 2.6. Otros comandos de Active Directory
 
-### 2.5.1. `get-ADObject`
+### 2.6.1. `get-ADObject`
 
 Obtiene cualquier tipo de objetos (que filtremos) mientras que el resto de **get-AD..** específica que tipo de objeto queremos
 
@@ -370,16 +514,14 @@ get-ADOrganizationalUnit -filter 'name -like "ou*"'  # Lista de unidades organiz
 ```
 
 
-### 2.5.2. `Move-ADObject`
+### 2.6.2. `Move-ADObject`
 Para poder mover un ordenador de sitio de grupo a otro, o cualquier otro objeto
 ```powershell
 Move-ADObject "cn=equipo1,ou=grupo1,dc=dominio,dc=lan" -TargetPath "cn=equipo1,ou=grupo2,dc=dominio,dc=lan"
 ```
 
 
-
-
-### 2.5.3. `Get-ADForest`
+### 2.6.3. `Get-ADForest`
 Conocer el tipo de bosque dentro del bosque genérico
 
 ```powershell
@@ -387,7 +529,7 @@ Get-ADForest | Select-Object -ExpandProperty ForestMode
 Get-ADDoain | Select-Object  -ExpandPropertyh domainMode
 ```
 
-### 2.5.4. `Get-ADDomainCotroller`
+### 2.6.4. `Get-ADDomainCotroller`
 Búsqueda de información del controlador del dominio. EL PC donde esta instalado el dominio. 
 
 ```powershell
@@ -395,7 +537,7 @@ Get-ADDomainCotroller -filter *
 Get-ADDomainCotroller -filter * | FT name, domain, site, ipv4address, operatingsystem
 ```
 
-### 2.5.5. `search-ADAccount` 
+### 2.6.5. `search-ADAccount` 
 
 Búsquedas de cuentas. En este caso tenemos ejemplos de obtener las cuentas inactivas
 ```powershell
@@ -411,7 +553,7 @@ Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00 -UserOnly | FT Name, Obj
 Get-ADUser -filter * -Properites LastLogonDate | ? { $_.LastLogonName -eq $null } | Select name
 ```
 
-### 2.5.6. `Set-ADAccountExpiriation` y `Clear-ADAccountExpiration`
+### 2.6.6. `Set-ADAccountExpiriation` y `Clear-ADAccountExpiration`
 
 Establecer inicio y expiración de las cuentas
 ```powershell
@@ -419,7 +561,7 @@ Set-ADAccountExpiriation -Identity usuario1 -datetime "30/06/2021"
 Clear-ADAccountExpiration -identity usuario1 # anualción de fecha de expiración
 ```
 
-### 2.5.7. `Unlock-ADAccount`
+### 2.6.7. `Unlock-ADAccount`
 
 Desbloqueo de cuenta de usuario, por ejemplo al fallar el password.
 
@@ -434,7 +576,7 @@ search-account -lockedout | unlock-ADAccount -passthru -confirm
 Get-ADGroupMember -identity "secndariauni10" -Recursive | %{Get-ADUser -identity $_.distingueshedNAme -Propierties Enabled | ....}
 ```
 
-### 2.5.8. `Set-ADAccountPassword`
+### 2.6.8. `Set-ADAccountPassword`
 Cambio de password de usuario de usuarios
 
 ```powershell
@@ -459,7 +601,7 @@ Set-ADGroup -identity 'migrupo' -groupcategory Distribution -groupscope Universa
 $(get-ADUser -properties AccountExpirationDate -filter {memberof -recursivematch } | Select name, accountExpirationDate | where ($_.AccountExperitionDate -ne $null).count )
 ```
 
-## 2.6. Tabla resumen de comandos y sufijos
+## 2.7. Tabla resumen de comandos y sufijos
 
 
 | Prefijo | Sufijo |
@@ -476,47 +618,106 @@ $(get-ADUser -properties AccountExpirationDate -filter {memberof -recursivematch
 
 
 
-
-## 2.7. Filtros: Ejemplos de uso con comandos de Active Directory
+## 2.8. Filtros: Ejemplos de uso con comandos de Active Directory
 
 A continuación batería de consultas a poder realizar con lo visto anteriormente
 
 ```powershell
-# cuenta todos los usuarios del AD
 $(get-aduser -filter *).count
+# cuenta todos los usuarios del AD
 
-# también funciona
 (get-aduser -filter *).count 
+# también funciona
 
-# cuenta de una unidad organizativas especifica
 $(get-aduser -filter * -searchbase "ou=unidad,dc=dominio=dc=lan").count 
+# cuenta de una unidad organizativas especifica
 
-# Adminstradores
 $(get-adgroupmember -identity "administradores").count 
+# Adminstradores
 
-# contamos grupos dados de alta en AD
 $(get-adgroup -filter * -searchbase "dc=dominio=dc=lan").count  
+# contamos grupos dados de alta en AD
 
-# Usuarios habilitados
 $(get-aduser -filter *  | Where-Object {$_.enabled -eq $True}).count  
-
-# Consulta de usuarios que se han creado durante los últimos 7 días
-$fecha = ((get-date).addDays(-7))
-
 # Usuarios habilitados
+
+$fecha = ((get-date).addDays(-7))
+# Consulta de usuarios que se han creado durante los últimos 7 días
+
 $(get-aduser -filter * -Properties * | Where-Object {$_.whenCreated -ge $fecha}).count | select Name, whenCreated | Sort Name 
+# Usuarios habilitados
 # Eb este caso **-properties** es redundante porque ya forma parte el * (asterisco) del filtro anterior
 
-# Consulta de usuarios que tienen contaseña sin caducidad
 $(get-ADUser -filter * -properties * | where{ $_.passwordNeverExpieres -eq $false } ) | select Name | sort Name
+# Consulta de usuarios que tienen contaseña sin caducidad
 
+$(get-ADGroup -filter *) | select name, groupCategory, groupScope | Format-Table
 # Consultar todos los grupos del sistema
-$(get-ADGroup -filter *) | seelect name, groupCategory | FT
+
+Get-ADGroupMember -identity “Administradores” | select name  
+# Mostramos los nombres de los usuarios del grupo Administradores del dominio
+
+Get-ADPrincipalGroupMembership -identity administrador | Sort-object | FT -property name, samaccountname –A
+# Mostramos los grupos a los que pertenece un usuario. La opción –A significa autosize. El autosize si no cabe en una columna lo autocompleta, es decir estira la columna de format-table.
+
+Get-ADForest| Select-Object -ExpandProperty ForestMode 
+# Obtenemos el nivel del bosque de Active Directory. Solo pone el tipo de bosque al que pertenece
+
+Get-ADDomain | Select-Object -ExpandProperty domainmode 
+#Obtenemos el nivel de domino de Active Directory, es decir, lo mismo de antes pero con el dominio
+
+Get-ADDomainController -Filter 
+# Muestra todos los datos del controlador de dominio
+
+Get-ADDomainController -Filter * | FT name,domain, forest,site, ipv4address, operatingsystem 
+# Muestra los datos seleccionados del controlador de dominio
+
+Get-ADUser -Filter “Enabled -eq '$false'” | Select Name, UserPrincipalName | Sort name
+# Mostramos usuarios con cuentas deshabilitadas, nombres y los FQN (nombres certificados), ordenados por nombre.
+
+Search-ADAccount –AccountDisabled | FT Name,ObjectClass 
+# Otra forma de mostrar cuentas deshabilitadas usando parámetro de cmdlet y no filtros. Además mostramos la clase del objeto.
+
+Search-ADAccount -AccountDisabled -UsersOnly| FT name,lastlogondate, lockedout, objectclass, passwordexpired, passwordneverexpires 
+# Encuentra usuarios con las cuentas deshabilitadas, y mostramos los datos indicados en formato tabla.
+
+Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00 -UsersOnly |Sort-Object | FT Name,ObjectClass 
+# Encuentra las cuentas de usuarios que no han sido utilizadas durante los últimos 90 días, y los muestra clasificados con sus nombres y clase de objeto.
+
+Get-ADUser -Filter * -Properties LastLogonDate | ? { $_.LastLogonDate -eq $null } | Select name 
+# Encuentra los usuarios que no han iniciado nunca la sesión y muestra solo sus nombres.
+
+Set-ADAccountExpiration -Identity usu1 -datetime “31/12/2021” 
+# Configura la cuenta de usuario usu1 para que expire el 31/12/2021
+
+Clear-ADAccountExpiration -identity usu1
+# Deshabilita la fecha de caducidad de la cuenta usu1
+
+Unlock-ADAccount -identity usu1 
+# Desbloquea la cuenta usu1. El bloqueo viene provocado porque agota el número intentos fallidos en la introducción de la contraseña.
+
+search-adaccount -lockedout | unlock -adaccount -passthru -confirm:$false
+# Encuentra y desbloquea todas las cuentas bloqueadas en Active Directory. Si añadiéramos un filtro para un grupo o usuario podríamos desbloquearlos solo a ellos.
+
+Get-ADGroupMember -Identity “secundariauni10” -Recursive | %{Get-ADUser -Identity $_.distinguishedName -Properties Enabled | ?{$_.Enabled -eq $false}} | Select DistinguishedName,Enabled 
+# Encuentra los usuarios deshabilitados en el grupo secundariauni10, utilizando filtros. Recordad que distinguishedName es el nombre LDAP.
+
+Set-ADAccountPassword -identity u1 -reset -newpassword (Convertto-Securestring -asplaintext “Passw0rd123!” -Force) 
+#Cambiamos la contraseña del usuario u1 usando la conversión de un string a string cifrado. Otro ejemplo para filtrar los usuarios dentro de una ruta concreta en base a su ubicación y fecha de caducidad de cuenta, también llamada fecha de expiración, si la tiene. 
+
+(get-aduser -filter * -searchbase "dc=domiprofe,dc=curso" -properties accountexpirationdate|select name,accountexpirationdate | where {$_.accountexpirationdate -ne $null}).count
+# Mostramos el número de usuarios con fecha de caducidad de cuenta, de todo el dominio
+
+(get-aduser -filter * -searchbase "ou=curso,dc=domiprofe,dc=curso" -properties accountexpirationdate|select name,accountexpirationdate|where {$_.accountexpirationdate -ne $null}).count
+# De la unidad organizativa curso, mostramos el número de usuarios con fecha de caducidad de cuenta.
+```
+
+Hay que tener en cuenta que si hay uno solo no muestra nada. Sólo cuenta 2 o más. Sin embargo, si mostramos los nombres con .name siempre funciona. Por ejemplo:
+```powershell
+(get-aduser -filter * -searchbase "ou=curso,dc=domiprofe,dc=curso" -properties accountexpirationdate|select name,accountexpirationdate|where {$_.ccountexpirationdate -ne $null}).name
 ```
 
 
-
-{% comment %} 
 
 # 3. Active Directory - Permisos
 
@@ -619,4 +820,5 @@ A continuación se detallan los posibles valores que pueden tomar cada uno de lo
 | ***AccessControlType*** | Allow, Deny | 
 
 
+{% comment %} 
 {% endcomment %}

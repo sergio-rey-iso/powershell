@@ -32,7 +32,6 @@ permalink: /PowerShell_1_Basico/
   - [4.2. Ordenando los resultados de los CmdLets](#42-ordenando-los-resultados-de-los-cmdlets)
     - [4.2.1. `Sort-Object`](#421-sort-object)
   - [4.3. Filtrando los resultados de los CmdLets](#43-filtrando-los-resultados-de-los-cmdlets)
-    - [4.3.1. `Where-Object`](#431-where-object)
     - [4.3.2. `Select-Object`](#432-select-object)
     - [4.3.3. `Where-Object`](#433-where-object)
 - [5. CmdLets para la gestión de **servicios** y **procesos**](#5-cmdlets-para-la-gestión-de-servicios-y-procesos)
@@ -551,30 +550,6 @@ ls | Get-Member -MemberType Property	# muestra las propiedades del comando.
 
 ## 4.3. Filtrando los resultados de los CmdLets
 
-### 4.3.1. `Where-Object`
-
-Permite realizar un filtro mediante una condición concreta entre los resultados de un comando determinado. Siempre se utiliza después de una tubería
-
-***Ejemplos de uso:***
-
-```powershell
-Get-Service                                                     # Muestra todos los servicios del sistema
-Get-Service | Where-Object { $_.Status -like 'Running'}         # Servicio con estado *Running*
-Get-Process | Where-Object { $_.PriorityClass -eq "Normal"}     # Servicios con prioridad Normal
-```
-
-- **Notas**: 
-  - `$_`  : representa el conjunto total de elementos como resultado de la ejecución del comando anterior a la tubería
-  - `&_.` : el punto (`.`) se utiliza para especificar una propiedad de todas las obtenidas entre los resultados del comando 
-
-
-***Más ejemplos: ***
-
-```powershell
-Get-ChildItem | Where-Object {$_.FullName -match '[a-z]+\.*txt$'}                                       # donde el nombre "algo" y luego termine por .txt
-Get-ChildItem | Where-Object {$_.Length -ge 1000 -and $_.LastAccessTime -gt (Get-Date '2020/03/30')}    # listar archivos que sean de mas de 1000 kb y que el último acceso sea posterior a una fecha
-```
-
 ### 4.3.2. `Select-Object`
 
 Seleccionar objetos que vienen de la tubería. 
@@ -620,7 +595,27 @@ powershell -like 'power*'
 powershell -like 'po?er*'
 ```
 
-Tabién es interesante el parámetro `-match` que comprueba is una cadena sigue **un patron** determinado:
+***Ejemplos de uso:***
+
+```powershell
+Get-Service                                                     # Muestra todos los servicios del sistema
+Get-Service | Where-Object { $_.Status -like 'Running'}         # Servicio con estado *Running*
+Get-Process | Where-Object { $_.PriorityClass -eq "Normal"}     # Servicios con prioridad Normal
+```
+
+- **Notas**: 
+  - `$_`  : representa el conjunto total de elementos como resultado de la ejecución del comando anterior a la tubería
+  - `&_.` : el punto (`.`) se utiliza para especificar una propiedad de todas las obtenidas entre los resultados del comando 
+
+
+***Más ejemplos: ***
+
+```powershell
+Get-ChildItem | Where-Object {$_.FullName -match '[a-z]+\.*txt$'}                                       # donde el nombre "algo" y luego termine por .txt
+Get-ChildItem | Where-Object {$_.Length -ge 1000 -and $_.LastAccessTime -gt (Get-Date '2020/03/30')}    # listar archivos que sean de mas de 1000 kb y que el último acceso sea posterior a una fecha
+```
+
+También es interesante el parámetro `-match` que comprueba is una cadena sigue **un patron** determinado:
 
 - [`-match`](https://docs.microsoft.com/es-es/powershell/module/microsoft.powershell.core/about/about_regular_expressions?view=powershell-7.1)
 

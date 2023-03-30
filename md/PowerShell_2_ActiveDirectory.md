@@ -4,7 +4,9 @@ permalink: /PowerShell_2_ActiveDirectory/
 ---
 
 
-- [1. Módulos en PowerShell](#1-módulos-en-powershell)
+- [1. Conocimientos previos](#1-conocimientos-previos)
+  - [1.1. LDAP y sus componentes](#11-ldap-y-sus-componentes)
+  - [1.2. Módulos en ***PowerShell***](#12-módulos-en-powershell)
 - [2. PowerShell para administración de *Active Directory*](#2-powershell-para-administración-de-active-directory)
   - [2.1. Comandos para la gestión de **usuarios**](#21-comandos-para-la-gestión-de-usuarios)
     - [2.1.1. `New-ADUser`](#211-new-aduser)
@@ -53,7 +55,60 @@ permalink: /PowerShell_2_ActiveDirectory/
     - [3.2.5. Funcion **```New-Object System.Security.AccessControl.FileSystemAccessRule()```**](#325-funcion-new-object-systemsecurityaccesscontrolfilesystemaccessrule)
 
 
-# 1. Módulos en PowerShell
+# 1. Conocimientos previos
+
+## 1.1. LDAP y sus componentes
+
+**LDAP** (“***Lightweight Directory Access Protocol***”) pertenece al grupo de los protocolos de red y se presenta como protocolo de acceso estandarizado para consultas y cambios según el modelo cliente-servidor en servicios de directorio distribuidos y centrales. 
+
+**LDAP** se usa como medio de comunicación para directorios y servidores **LDAP** para buscar, cambiar o autenticar de manera eficiente atributos en un servicio de directorio complejo.
+
+**LDAP** es, junto a *Kerberos*, *SMB* y *DNS,* uno de los cuatro protocolos estándar centrales que proporciona una comunicación y transmisión de datos fluidas en **Microsoft Active Directory**. Active directory se desarrolló para ser usado según el estándar LDAP
+
+
+Así pues LDAP sirve de base para facilitar el uso de Active directory gracias a una serie de componentes y estructura determinada que se compone básicamente de:
+- Directorios: es un árbol de entradas de directorio, jerarquizado.
+- Entradas: cada entra consta de un conjunto de atributos. Por ejemplo, el nombre de usuario, contraseña, y otros detalles de identificación. Además, cada entrada tiene un identificador único con su DN (Distinguished Name).
+- Atributos: los atributos tienen nombre y uno o más valores, son definidos en los esquemas.
+
+Por ejemplo, para verlo de una forma más visual, una estructura básica de un LDAP podría parecerse a esta:
+
+```
+dn: cn=Empresa,dc=Simarro,dc=lan
+cn: Administración
+givenName: Pepito
+sn: Pérez
+telephoneNumber: +34 600 000 000
+telephoneNumber: +34 611 111 111
+mail: pepitoperez@simarro.lan
+manager: cn= Administracion,dc=Simarro,dc=lan
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+```
+
+- **dn** (*domain name*): nombre de entrada, pero no forma parte de la propia entrada.
+- **dc**: componente de dominio para identificar las partes del dominio donde se almacena el directorio LDAP.
+- **cn** (*common name*): nombre de atributo para identificar el nombre de usuario, por ejemplo
+- **sn** (*surname*): apellido del usuario
+- **ou** (*Organizational unit*): para las unidades organizativas.
+
+
+El resto de líneas son los atributos de la entrada, como el givenName, sn, telephoneNumber, mail y los diferentes objectClass que tenemos. Así es como se jerarquiza y se aloja toda esta información en la base de estos servidores LDAP. 
+
+Veamos ahora como se aplica a nuestro caso en concreto, según se puede ver en la siguiente imagen:
+
+<div align="center">
+    <img src="../img/02_LDAP_AD.png" alt="Ejemplo de LDAP en Acitve Diretory" width="70%" />
+</div>
+
+En esta caso, podemos ver cómo se compone la ruta, desde el nombre el usuario (**cn**) hasta el dominio (**dc**) pasando por todas las unidades organizativas (**ou**).
+
+Para poder referenciar desde ***PowerShell*** un objeto del Active Directory, es necesario utilizar estas estructura LDAP para poder identificarlo.
+
+
+## 1.2. Módulos en ***PowerShell***
 
 Son paquetes que contienen comandos específicos para la administración de una faceta del sistema.
 
@@ -132,7 +187,7 @@ New-aduser -name “usu2” -accountpassword $(read-Host “Contraseña” -asSe
 
 Así pues los parámetros habituales que nos encontramos en `New-AdUser` son:
 
-    - `-UserPrincipalName` : Establce el nombre del Login
+    - `-UserPrincipalName` : Establece el nombre del Login
     - `-SamAccountName`: Para nombre anterior a Windows 2000
     - `-Name`: Nombre de pila
     - `-Surname`: Apellido/s
@@ -386,19 +441,19 @@ En el caso de powershell también hay que habilitar para que se pueda eliminar
 ***Ejemplos*** de uso: 
 
 ```powershell
-Set-ADOrganizationalUnit -identity "ou=organizacion,dc=docminio, dc=curso" -ProtectedFromAccidentialDeletion $FAlse
-Remove-AdOrganizationaUnit -identity "ou=organization,dc=dominio,dc=curso"
-Remove-AdOrganizationaUnit -identity "ou=organization,dc=dominio,dc=curso" -recursive # para borrar todo lo que tenga dentro
+Set-ADOrganizationalUnit -identity "ou=organizacion,dc=domiprofe, dc=curso" -ProtectedFromAccidentialDeletion $FAlse
+Remove-AdOrganizationaUnit -identity "ou=organization,dc=domiprofe,dc=curso"
+Remove-AdOrganizationaUnit -identity "ou=organization,dc=domiprofe,dc=curso" -recursive # para borrar todo lo que tenga dentro
 ```
 
 ## 2.4. Modificar usuarios
 
-Para modificar las propiedades de un usuario, se usa el cmdlet set-aduser. Lo primero que tenemos que hacer para modificar una propiedad de un usuario o usuarios es conocer qué tipo de dato acepta cada propiedad para saber qué le podemos asignar.
+Para modificar las propiedades de un usuario, se usa el cmdlet `Set-ADUser`. Lo primero que tenemos que hacer para modificar una propiedad de un usuario o usuarios es conocer qué tipo de dato acepta cada propiedad para saber qué le podemos asignar.
 
 Para ello podemos asignar una búsqueda de usuarios a una variable, por ejemplo:
 
 ```powershell
-$misusuarios=get-aduser -filter “Name -like ‘u*’” -property # Guardamos en una variable todos los usuarios que empiezan por u.
+$misusuarios=get-aduser -filter “Name -like ‘s*’” -property # Guardamos en una variable todos los usuarios que empiezan por u.
 $misusuarios                                                # Mostramos todas las propiedades de estos usuarios.
 $misusuarios.name                                           # Mostramos solo la propiedad name.
 ```
@@ -406,7 +461,7 @@ $misusuarios.name                                           # Mostramos solo la 
 En línea de comandos es mejor manipular un solo usuario, para varios usuarios es mejor un script.
 
 ```powershell
-$miusu=get-aduser -filter “name -eq ‘usu3’” -property # Asignamos el objeto usuario usu3 a la variable $miusu.
+$miusu=get-aduser -filter “name -eq ‘srey00’” -property # Asignamos el objeto usuario srey00 a la variable $miusu.
 ```
 
 Una vez hecho esto, podemos escribir:
@@ -444,13 +499,13 @@ De la misma manera también podemos actualizar diversas propiedades a la vez, pa
 almacenado:
 
 ```powershell
-set-aduser -identity $miusu -department “Informatica” -city “Elche” -country “España”
+set-aduser -identity $miusu -department “Informatica” -city “Xàtiva” -country “España”
 ```
 
 Modificamos las propiedades indicadas al usuario contenido en $miusu
 
 ```powershell
-set-aduser -identity "us4" -department “Informatica” -city “Elche” -country “ES”
+set-aduser -identity "us4" -department “Informatica” -city “Xàtiva” -country “ES”
 ```
 
 Modificamos las propiedades indicadas al usuario concreto us4.
@@ -458,7 +513,7 @@ Modificamos las propiedades indicadas al usuario concreto us4.
 Otro ejemplo, si pusiéramos:
 
 ```powershell
-set-aduser -identity $misusuarios -department “Informatica” -city “Elche” -country “ES”
+set-aduser -identity $misusuarios -department “Informatica” -city “Xàtiva” -country “ES”
 ```
 
 Se aplicarían los cambios en estas propiedades, a todos los usuarios contenidos en la variable que anteriormente hemos usado.
@@ -472,7 +527,7 @@ Para crear con anterioridad un equipo y que se ubique en un lugar especifico
 ***Ejemplos*** de uso: 
 
 ```powershell
-New-ADComputer -name equipo1 -path "ou=organizacion,dc=dominio,dc=curso" -PassThru
+New-ADComputer -name equipo1 -path "ou=organizacion,dc=domiprofe,dc=curso" -PassThru
 ```
 > **-PassThru** para que muestren detalle de la salida.
 
@@ -488,8 +543,8 @@ Para seleccionar un computador.
 
 ***Ejemplos*** de uso: Para habilitar / deshabilitar: Obtenemos el equipo y lo obtenido se lo pasamos a la order de habilitar o deshabilitar
 ```powershell
-get-ADComputer -filter * -searchbase "ou=uniddad,dc=dominio,dc=curso" | disable-ADAccount
-get-ADComputer -filter * -searchbase "ou=uniddad,dc=dominio,dc=curso" | enable-ADAccount
+get-ADComputer -filter * -searchbase "ou=uniddad,dc=domiprofe,dc=curso" | disable-ADAccount
+get-ADComputer -filter * -searchbase "ou=uniddad,dc=domiprofe,dc=curso" | enable-ADAccount
 ```
 
 ### 2.5.4. `Remove-ADComputer`
@@ -724,18 +779,39 @@ Hay que tener en cuenta que si hay uno solo no muestra nada. Sólo cuenta 2 o m�
 ## 3.1. Gestión de permisos SMB
 
 ### 3.1.1. `New-SmbShare`
+
 Para asignar premisos SMB, o sea, compartir, una carpeta, utilizamos el comando `New-SmbShare`
 
-Para más información sobre el comando: [Microsoft New-SmbShare](https://learn.microsoft.com/en-us/powershell/module/smbshare/new-smbshare?view=windowsserver2022-ps
+Para sintaxis y más información sobre el comando: [Microsoft New-SmbShare](https://learn.microsoft.com/en-us/powershell/module/smbshare/new-smbshare?view=windowsserver2022-ps
 
-Creación de una carpeta y asignar permisos SMB
+Ejemplo para asignar permisos SMB
+
+```powershell 
+New-SmbShare -Name CarpetaNueva -Path E:\Desarrollo\ -FullAccess Administradores -ChangeAccess gDesarrollo,gAdministracion -ReadAccess gTrabajadores
+
+```
+
+Otra forma, utilizando una variable que contiene todos los datos:
+
 ```powershell
-Set-Location e:\                                                                                 
-Get-ChildItem                                                                                    
-New-Item Desarrollo -ItemType Directory                                                          
-New-Item Desarrollo\Web -ItemType Directory                                                      
-New-Item Desarrollo\Multiplataforma -ItemType Directory                                          
-New-SmbShare -Name Desarrollo -Path E:\Desarrollo\ -FullAccess Administradores -ChangeAccess gDesarrollo00,gDesarrolloMulti00 -ReadAccess gSocios00
+$Parameters = @{
+    Name = 'VMSFiles'
+    Path = 'C:\ClusterStorage\Volume1\VMFiles'
+    FullAccess = 'Contoso\Administrator', 'Contoso\Contoso-HV1$'
+}
+New-SmbShare @Parameters
+```
+
+y otro ejemplo, otorgando multiples permisos:
+
+```powershell
+$Parameters = @{
+    Name = 'VMSFiles'
+    Path = 'C:\ClusterStorage\Volume1\VMFiles'
+    ChangeAccess = 'CONTOSO\Finance Users','CONTOSO\HR Users'
+    FullAccess = 'Administrators'
+}
+New-SmbShare @Parameters
 ```
 
 ### 3.1.2. Sufijo `SmbShare`

@@ -188,22 +188,22 @@ New-ADUser -name “usu2” -accountpassword $(read-Host “Contraseña” -asSe
 Así pues los parámetros habituales que nos encontramos en `New-AdUser` son:
 
     - `-UserPrincipalName` : Establece el nombre del Login
-    - `-SamAccountName`: Para nombre anterior a Windows 2000
-    - `-Name`: Nombre de pila
-    - `-Surname`: Apellido/s
-    - `-DisplayName`: Nombre a mostrar
-    - `-Path` : Ubicación o dirección de árbol AD donde se crea el usuario
-    - `-Department` : Nombre del departamento
-    - `-AccountPassword (ConvertTo-SecureString -string "P@ssw0rd" -AsPlainText -Force)`: Password
-    - `-Enabled`: Si la cuenta esta habilitado o no
-    - `-ChangePasswordAtLogon`: Obliga o no a cambiar la contraseña en el primer inicio
-    - `-PassThru`: Muestra información detallada en caso de error
+    - ` -SamAccountName`: Para nombre anterior a Windows 2000
+    - ` -Name`: Nombre de pila
+    - ` -Surname`: Apellido/s
+    - ` -DisplayName`: Nombre a mostrar
+    - ` -Path` : Ubicación o dirección de árbol AD donde se crea el usuario
+    - ` -Department` : Nombre del departamento
+    - ` -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd" -AsPlainText -Force)`: Password
+    - ` -Enabled`: Si la cuenta esta habilitado o no
+    - ` -ChangePasswordAtLogon`: Obliga o no a cambiar la contraseña en el primer inicio
+    - ` -PassThru`: Muestra información detallada en caso de error
 
 
 ***Ejemplos*** de uso: 
 
 ```powershell
-New-ADUser -UserPrincipalName "sbalmes" -SamAccountName "sbalmes" -Name "Santi" -Surname "Balmes" -DisplayName "Santi Balmes" -Path "OU=ouCantante,OU=ouLoveOfLesbian,OU=ouGrupoMusicales,DC=DOMSERGIO,DC=LAN" -Department "Grupos Españoles" -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd -AsPlainText -Force) -Enabled $true -ChangePasswordAtLogon:$false -PassThru
+New-ADUser -UserPrincipalName "sbalmes" -SamAccountName "sbalmes" -Name "Santi" -Surname "Balmes" -DisplayName "Santi Balmes" -Path "OU=ouCantante,OU=ouLoveOfLesbian,OU=ouGrupoMusicales,DC=DOMSERGIO,DC=LAN" -Department "Grupos Españoles" -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd" -AsPlainText -Force) -Enabled $true -ChangePasswordAtLogon:$false -PassThru
 
 New-ADUser -DisplayName "alumno1" -Name "alumno1" -UserPrincipalName "alumno1" -Enabled:$true -Path "OU=usuarios,OU=Organizacion,DC=dominio,DC=lan" -AccountPassword (ConvertTo-SecureString -string "P@ssw0rd" -AsPlainText -Force) -ChangePasswordAtLogon:$True
 ```
@@ -341,13 +341,13 @@ New-ADGroup -Name "g_alumnos" -SamAccountName "gAlumnos" -GroupCategory Security
 
 En el siguiente ejemplo creamos el grupo *migrupo* de tipo seguridad y de ámbito global en el contenedor users del dominio *domiprofe.curso*.
 ```powershell
-New-adgroup –name “migrupo” -groupcategory security –groupscope global -path “cn=users, DC=domiprofe,DC=curso”
+New-adgroup –name "migrupo" -groupcategory security –groupscope global -path "cn=users, DC=domiprofe,DC=curso"
 ```
 
 Creamos otro grupo de seguridad global llamado *migrupo2* en la unidad organizativa *otraou* con `displayname` y descripción.
 
 ```powershell
-New-AdGroup -Name “migrupo2” -GroupCategory Security -GroupScope Global -displayname ‘Mi Segundo grupo’ -Path “OU=otraou, DC=domiprofe, DC=curso” -Description “Todos los grupos”
+New-AdGroup -Name "migrupo2" -GroupCategory Security -GroupScope Global -displayname "Mi Segundo grupo" -Path "OU=otraou, DC=domiprofe, DC=curso" -Description "Todos los grupos"
 ```
 
 ### 2.2.2. `Remove-ADGroup`: 
